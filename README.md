@@ -1,3 +1,2 @@
 # Minesweeper
-wuts dis
-y do dis
+Best game NA
