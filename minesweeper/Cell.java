@@ -26,7 +26,7 @@ public class Cell {
 	private Cell west;
 	private Cell northwest;
 	private int data;
-	private boolean hidden = false;
+	private boolean hidden = true;
 	
 	/*************************************************
 	 * 
@@ -312,7 +312,6 @@ public class Cell {
 	 * 	return: 		none
 	 * 
 	 *************************************************/
-
 	
 	public void setData(int newData) {
 		data = newData;

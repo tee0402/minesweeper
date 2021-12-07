@@ -56,20 +56,18 @@ public class GridPanel extends JPanel
 		flags = mines;
     Grid grid = new Grid(rows, cols, mines);
 		guiGrid = new JPanel[rows][cols];
-        cellsLeft = grid.getRows() * grid.getColumns();
-        try {
-    		flag = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/flag.gif")));
-    		Image newimg = flag.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-    		flagImage = new ImageIcon(newimg);
-    	} catch (IOException e) {
-    		System.out.println("Error reading flag.gif.");
-    	}
+    cellsLeft = grid.getRows() * grid.getColumns();
+    try {
+      flag = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/flag.gif")));
+      Image newimg = flag.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+      flagImage = new ImageIcon(newimg);
+    } catch (IOException e) {
+      System.out.println("Error reading flag.gif.");
+    }
 		setLayout(new GridLayout(rows, cols));
 		
-		for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < cols; j++)
-			{
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
 				guiGrid[i][j] = new JPanel();
 				guiGrid[i][j].setLayout(new BorderLayout());
 				add(guiGrid[i][j]);
@@ -167,8 +165,8 @@ public class GridPanel extends JPanel
 	        	grid.setHidden(row, col, false);
 	        	guiGrid[row][col].removeAll();
 	        	guiGrid[row][col].revalidate();
-	            guiGrid[row][col].repaint();
-	            cellsLeft--;
+            guiGrid[row][col].repaint();
+            cellsLeft--;
 	        	grid.reveal(grid.getCell(row, col), row, col);
 	        }
 	        else {
