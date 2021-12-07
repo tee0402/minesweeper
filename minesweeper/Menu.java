@@ -1,24 +1,49 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
+/******************************************************************************************
+ * 
+ * 	NAME:			Iao Seng Sio and Sollie Garcia
+ * 
+ * 	HOMEWORK: 		MineSweeper Project
+ * 
+ * 	CLASS:			ICS 211
+ * 
+ * 	INSTRUCTOR:		Scott Robertson
+ * 
+ *	DATE: 			May 4, 2016
+ * 
+ *	FILENAMES: 		Menu.java
+ *
+ *	DESCRIPTION: 	This file contains all the methods that are required to create and show the
+ *					game field. This includes the top tool bar and its methods.
+ *
+ **********************************************************************************************/
 public class Menu {
-	
-	private int width;
-	private int height;
-	public static double screenWidth;
-	public static double screenHeight;
-	public static Grid grid;
-	
+
+  public static double screenWidth, screenHeight;
+
+	/*************************************************
+	 * 
+	 * 	Method:			Menu
+	 * 
+	 * 	Description: 	Constructor. Creates the game field and the 
+	 * 					game tray and help tray.
+	 * 
+	 * 	param: 			none	
+	 * 
+	 * 	return: 		none
+	 * 
+	 *************************************************/
 	public Menu() {
-		width = 500;
-		height = 500;
+    int width = 500;
+    int height = 500;
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		screenWidth = screen.getWidth();
 		screenHeight = screen.getHeight();
 		JFrame frame = new JFrame("Minesweeper");
 		frame.setSize(width, height);
-		frame.setLocation(2 * (int)screenWidth / 5, (int)screenHeight / 4);
+		frame.setLocation((int)screenWidth * 2 / 5, (int)screenHeight / 4);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
@@ -26,41 +51,30 @@ public class Menu {
 		panel.setBackground(Color.lightGray);
 		frame.add(panel);
 		
-		JLabel label = new JLabel("Minesweeper");		
+		JLabel label = new JLabel("Minesweeper");
 		JButton easy = new JButton("Easy");
 		JButton medium = new JButton("Medium");
 		JButton hard = new JButton("Hard");
-		easy.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				grid = new Grid(10, 10, 9);
-				frame.dispose();
-				new Game();
-			}
-		});
-		medium.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				grid = new Grid(15, 15, 50);
-				frame.dispose();
-				new Game();
-			}
-		});
-		hard.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				grid = new Grid(20, 20, 100);
-				frame.dispose();
-				new Game();
-			}
-		});
+
+    easy.addActionListener(e -> {
+       frame.dispose();
+       new Game("easy");
+     });
+		medium.addActionListener(e -> {
+      frame.dispose();
+      new Game("medium");
+    });
+		hard.addActionListener(e -> {
+      frame.dispose();
+      new Game("hard");
+    });
 		
 		panel.add(label);
 		panel.add(easy);
 		panel.add(medium);
 		panel.add(hard);
 		
-		label.setFont(new Font("Verdana", Font.PLAIN, 50));
+		label.setFont(new Font("Verdana", Font.BOLD, 50));
 		easy.setMaximumSize(new Dimension(width / 2, height / 5));
 		medium.setMaximumSize(new Dimension(width / 2, height / 5));
 		hard.setMaximumSize(new Dimension(width / 2, height / 5));

@@ -1,56 +1,96 @@
-import javax.swing.*;
+import javax.swing.JLabel;
 
-import java.awt.*;
+/******************************************************************************************
+ * 
+ * 	NAME:			Iao Seng Sio and Sollie Garcia
+ * 
+ * 	HOMEWORK: 		MineSweeper Project
+ * 
+ * 	CLASS:			ICS 211
+ * 
+ * 	INSTRUCTOR:		Scott Robertson
+ * 
+ *	DATE: 			May 4, 2016
+ * 
+ *	FILENAMES: 		Game.java
+ *
+ *	DESCRIPTION: 	This file sets the difficulties and starts the game
+ *
+ **********************************************************************************************/
 
 public class Game {
 	
-	private boolean inPlay;
-	private Highscores highscores;
-	private Timer timer;
-	private Grid grid;
+	public static String difficulty;
+	private static GameFrame gameFrame;
+	private static InfoWindow infoWindow;
 	
-	public Game() {
-		highscores = new Highscores();
-		grid = Menu.grid;
-		
-		JFrame frame = new JFrame();
-		frame.setSize(500, 500);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocation(2 * (int)Menu.screenWidth / 5, (int)Menu.screenHeight / 4);
-		frame.setVisible(true);
-
-		JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout());
-		frame.add(panel);
-		
-		JMenuBar menuBar = new JMenuBar();
-		panel.add(menuBar);
-		
-		JMenu menu = new JMenu();
-		menuBar.add(menu);
-		
-		timer = new Timer();
-		JLabel timeLabel = new JLabel();
-		panel.add(timeLabel);
-		
-		inPlay = true;
-		while (inPlay) {
-			int time = timer.elapsedTime();
-			timeLabel.setText(String.valueOf(time));
-			
-			boolean leftClicked = false;
-			if (leftClicked) {
-				//Set row and column to the button's row and column please
-				int row = 0;
-				int column = 0;
-				Cell cell = grid.getCell(row, column);
-				grid.reveal(cell);
-				leftClicked = false;
-			}
+	/*************************************************
+	 * 
+	 * 	Method:			Game
+	 * 
+	 * 	Description: 	Constructor. Sets the difficulty and starts the 
+	 * 					game
+	 * 
+	 * 	param: 			String newDifficulty	
+	 * 
+	 * 	return: 		none
+	 * 
+	 *************************************************/
+	
+	public Game(String newDifficulty) {
+		difficulty = newDifficulty;
+		switch (difficulty) {
+			case "easy":
+				startGame(10, 10, 10);
+				break;
+			case "medium":
+				startGame(15, 15, 40);
+				break;
+			case "hard":
+				startGame(22, 22, 99);
+				break;
 		}
-		
-		JDialog dialog = new JDialog();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		JOptionPane.showConfirmDialog(dialog, "Would you like to play again?");
+	}
+	
+	/*************************************************
+	 * 
+	 * 	Method:			startGame
+	 * 
+	 * 	Description: 	starts the game, starts the timer.
+	 * 
+	 * 	param: 			int rows, int cols, int mines	
+	 * 
+	 * 	return: 		none
+	 * 
+	 *************************************************/
+	
+	private void startGame(int rows, int cols, int mines)
+	{
+		Highscores.instantiate();
+		gameFrame = new GameFrame(rows, cols, mines);
+		infoWindow = new InfoWindow();
+		gameFrame.setVisible(true);
+		JLabel timeLabel = new JLabel();
+		gameFrame.add(timeLabel);
+		Time.instantiate();
+		int time = Time.elapsedTime();
+		timeLabel.setText(String.valueOf(time));
+	}
+	
+	/*************************************************
+	 * 
+	 * 	Method:			closeGame
+	 * 
+	 * 	Description: 	closes the game
+	 * 
+	 * 	param: 			none	
+	 * 
+	 * 	return: 		none
+	 * 
+	 *************************************************/
+	
+	public static void closeGame() {
+		gameFrame.dispose();
+		infoWindow.dispose();
 	}
 }
