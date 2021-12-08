@@ -117,7 +117,5 @@ public class GameFrame extends JFrame
 		setJMenuBar(menuBar);
 		menuBar.add(gameMenu);
 		menuBar.add(helpMenu);
-		
-	
 	}
 }

@@ -21,7 +21,7 @@ import javax.swing.border.*;
  **********************************************************************************************/
 
 public class InfoWindow extends JFrame{
-  public static JTextField txtFlagsLeft_1;
+  public static JTextField txtFlagsLeft;
 	private final JTextField txtTime;
 	Timer timer;
 	
@@ -52,12 +52,12 @@ public class InfoWindow extends JFrame{
 		contentPane.setLayout(null);
 		
 		getContentPane().setLayout(null);
-		txtFlagsLeft_1 = new JTextField();
-		txtFlagsLeft_1.setText("Flags left: " + GridPanel.flags);
-		txtFlagsLeft_1.setEditable(false);
-		txtFlagsLeft_1.setBounds(12, 21, 116, 22);
-		getContentPane().add(txtFlagsLeft_1);
-		txtFlagsLeft_1.setColumns(10);
+		txtFlagsLeft = new JTextField();
+		txtFlagsLeft.setText("Flags left: " + GridPanel.flags);
+		txtFlagsLeft.setEditable(false);
+		txtFlagsLeft.setBounds(12, 21, 116, 22);
+		getContentPane().add(txtFlagsLeft);
+		txtFlagsLeft.setColumns(10);
 		
 		txtTime = new JTextField();
 		txtTime.setEditable(false);

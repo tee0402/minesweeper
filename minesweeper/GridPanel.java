@@ -98,7 +98,7 @@ public class GridPanel extends JPanel
 								button.setIcon(tileImage);
 								flags++;
 							}
-							InfoWindow.txtFlagsLeft_1.setText("Flags left: " + GridPanel.flags);
+							InfoWindow.txtFlagsLeft.setText("Flags left: " + GridPanel.flags);
 						}
 					}
 				});
@@ -158,7 +158,7 @@ public class GridPanel extends JPanel
 	            	new Game(Game.difficulty);
 	            }
 	            else if (selection == JOptionPane.NO_OPTION) {
-	            	Game.closeGame();
+                System.exit(0);
 	            }
 	        }
 	        else if (grid.getData(row, col) == 0) {
@@ -180,9 +180,11 @@ public class GridPanel extends JPanel
 
 	        if (cellsLeft <= grid.getMines()) {
 	    		  Highscores.checkHighscore(Game.difficulty, Time.elapsedTime());
+            JFrame highscoreFrame = Highscores.highscoresWindow();
 	    		  int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
             if (selection == JOptionPane.YES_OPTION) {
               Game.closeGame();
+              highscoreFrame.dispose();
               new Game(Game.difficulty);
             }
             else if (selection == JOptionPane.NO_OPTION) {

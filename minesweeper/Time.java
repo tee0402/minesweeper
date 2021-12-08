@@ -48,6 +48,6 @@ public class Time {
 	
 	public static int elapsedTime() {
 		long endTime = System.currentTimeMillis();
-		return (int)((endTime - startTime) / 1000);
+		return (int) ((endTime - startTime) / 1000);
 	}
 }

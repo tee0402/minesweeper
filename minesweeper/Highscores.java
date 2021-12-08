@@ -40,41 +40,94 @@ public class Highscores {
 	 * 
 	 *************************************************/
 	
-	public static void instantiate() {
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+  public static void instantiate() {
 		easyScores = new ArrayList<>();
 		mediumScores = new ArrayList<>();
 		hardScores = new ArrayList<>();
 		
 		try {
-			Scanner easy = new Scanner(new File("easy_scores.txt"));
-			while (easy.hasNext()) {
-				easyScores.add(easy.nextInt());
+      File easyScoresFile = new File("easy_scores.txt");
+      easyScoresFile.createNewFile();
+      File mediumScoresFile = new File("medium_scores.txt");
+      mediumScoresFile.createNewFile();
+      File hardScoresFile = new File("hard_scores.txt");
+      hardScoresFile.createNewFile();
+			Scanner sc = new Scanner(easyScoresFile);
+			while (sc.hasNext()) {
+				easyScores.add(sc.nextInt());
 			}
-			easy.close();
-			Scanner medium = new Scanner(new File("medium_scores.txt"));
-			while (medium.hasNext()) {
-				mediumScores.add(medium.nextInt());
+			sc.close();
+			sc = new Scanner(mediumScoresFile);
+			while (sc.hasNext()) {
+				mediumScores.add(sc.nextInt());
 			}
-			medium.close();
-			Scanner hard = new Scanner(new File("hard_scores.txt"));
-			while (hard.hasNext()) {
-				hardScores.add(hard.nextInt());
+			sc.close();
+			sc = new Scanner(hardScoresFile);
+			while (sc.hasNext()) {
+				hardScores.add(sc.nextInt());
 			}
-			hard.close();
+			sc.close();
 		} catch (IOException e) {
 			System.out.println("Highscores file not found.");
 		}
-		
-		if (easyScores.size() == 0) {
-			easyScores.add(9001);
-		}
-		if (mediumScores.size() == 0) {
-			mediumScores.add(9001);
-		}
-		if (hardScores.size() == 0) {
-			hardScores.add(9001);
-		}
 	}
+
+  /*************************************************
+   *
+   * 	Method:			checkHighscore
+   *
+   * 	Description: 	writes the score in the correct position in the list
+   *
+   * 	param: 			String difficulty, int score
+   *
+   * 	return: 		none
+   *
+   *************************************************/
+
+  public static void checkHighscore(String difficulty, int score) {
+    if (difficulty.equals("easy") && (easyScores.size() == 0 || easyScores.size() < 10 || score < easyScores.get(easyScores.size() - 1))) {
+      addHighscore(score, easyScores);
+      writeHighscores(easyScores, "easy_scores.txt");
+    }
+    else if (difficulty.equals("medium") && (mediumScores.size() == 0 || mediumScores.size() < 10 || score < mediumScores.get(mediumScores.size() - 1))) {
+      addHighscore(score, mediumScores);
+      writeHighscores(mediumScores, "medium_scores.txt");
+    }
+    else if (difficulty.equals("hard") && (hardScores.size() == 0 || hardScores.size() < 10 || score < hardScores.get(hardScores.size() - 1))) {
+      addHighscore(score, hardScores);
+      writeHighscores(hardScores, "hard_scores.txt");
+    }
+  }
+
+  public static void addHighscore(int score, ArrayList<Integer> highscores) {
+    if (highscores.size() == 0 || (highscores.size() < 10 && score >= highscores.get(highscores.size() - 1))) {
+      highscores.add(score);
+    }
+    else {
+      for (int i = 0; i < highscores.size(); i++) {
+        if (score < highscores.get(i)) {
+          highscores.add(i, score);
+          if (highscores.size() == 11) {
+            highscores.remove(10);
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  public static void writeHighscores(ArrayList<Integer> highscores, String highscoresFile) {
+    try {
+      FileWriter fw = new FileWriter(highscoresFile);
+      for (Integer highscore : highscores) {
+        fw.write(highscore + " ");
+      }
+      fw.close();
+    } catch (IOException e) {
+      System.out.println("Highscores file not found.");
+    }
+  }
 	
 	/*************************************************
 	 * 
@@ -85,11 +138,11 @@ public class Highscores {
 	 * 
 	 * 	param: 			none	
 	 * 
-	 * 	return: 		none
+	 * 	return: 		frame of new window
 	 * 
 	 *************************************************/
 	
-	public static void highscoresWindow() {
+	public static JFrame highscoresWindow() {
 		JFrame frame = new JFrame("Highscores");
 		frame.setSize(400, 500);
 		frame.setLocation(2 * (int)Menu.screenWidth / 5, (int)Menu.screenHeight / 4);
@@ -99,129 +152,45 @@ public class Highscores {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(11, 4));
 		frame.add(panel);
-		
+
 		JLabel easy = new JLabel("Easy", SwingConstants.CENTER);
 		JLabel medium = new JLabel("Medium", SwingConstants.CENTER);
 		JLabel hard = new JLabel("Hard", SwingConstants.CENTER);
-		
 		easy.setFont(new Font("Verdana", Font.BOLD, 20));
 		medium.setFont(new Font("Verdana", Font.BOLD, 20));
 		hard.setFont(new Font("Verdana", Font.BOLD, 20));
-
 		panel.add(easy);
 		panel.add(medium);
 		panel.add(hard);
-		
+
+    JLabel scoreLabel;
 		for (int i = 0; i < 10; i++) {
-			if (i < easyScores.size() && easyScores.get(i) != 9001) {
-				JLabel easyScoresLabel = new JLabel((i + 1) + ".       " + easyScores.get(i));
-				easyScoresLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-				panel.add(easyScoresLabel);
+			if (i < easyScores.size()) {
+        scoreLabel = new JLabel((i + 1) + ".       " + easyScores.get(i));
 			}
 			else {
-				JLabel easyScoresLabel = new JLabel((i + 1) + ".       ");
-				easyScoresLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-				panel.add(easyScoresLabel);
+        scoreLabel = new JLabel((i + 1) + ".       ");
 			}
-			if (i < mediumScores.size() && mediumScores.get(i) != 9001) {
-				JLabel mediumScoresLabel = new JLabel(String.valueOf(mediumScores.get(i)), SwingConstants.CENTER);
-				mediumScoresLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-				panel.add(mediumScoresLabel);
-			}
-			else {
-				JLabel mediumScoresLabel = new JLabel();
-				panel.add(mediumScoresLabel);
-			}
-			if (i < hardScores.size() && hardScores.get(i) != 9001) {
-				JLabel hardScoresLabel = new JLabel(String.valueOf(hardScores.get(i)), SwingConstants.CENTER);
-				hardScoresLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-				panel.add(hardScoresLabel);
+      scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+      panel.add(scoreLabel);
+			if (i < mediumScores.size()) {
+        scoreLabel = new JLabel(String.valueOf(mediumScores.get(i)), SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
 			}
 			else {
-				JLabel hardScoresLabel = new JLabel();
-				panel.add(hardScoresLabel);
+        scoreLabel = new JLabel();
 			}
+      panel.add(scoreLabel);
+			if (i < hardScores.size()) {
+        scoreLabel = new JLabel(String.valueOf(hardScores.get(i)), SwingConstants.CENTER);
+        scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+			}
+			else {
+        scoreLabel = new JLabel();
+			}
+      panel.add(scoreLabel);
 		}
-	}
-	
-	/*************************************************
-	 * 
-	 * 	Method:			checkHighscore
-	 * 
-	 * 	Description: 	writes the score in the correct position in the list
-	 * 
-	 * 	param: 			String difficulty, int score	
-	 * 
-	 * 	return: 		none
-	 * 
-	 *************************************************/
-	
-	public static void checkHighscore(String difficulty, int score) {
-		if (difficulty.equals("easy") && score < easyScores.get(easyScores.size() - 1)) {
-			for (int i = 0; i < easyScores.size(); i++) {
-				if (score <= easyScores.get(i) && easyScores.size() < 10) {
-					easyScores.add(i, score);
-					break;
-				}
-				else if (score <= easyScores.get(i)) {
-					easyScores.add(i, score);
-					easyScores.remove(easyScores.size() - 1);
-					break;
-				}
-			}
-			try {
-				FileWriter fw = new FileWriter("easy_scores.txt");
-        for (Integer easyScore : easyScores) {
-          fw.write(easyScore + " ");
-        }
-				fw.close();
-			} catch (IOException e) {
-				System.out.println("Highscores file not found.");
-			}
-		}
-		else if (difficulty.equals("medium") && score < mediumScores.get(mediumScores.size() - 1)) {
-			for (int i = 0; i < mediumScores.size(); i++) {
-				if (score <= mediumScores.get(i) && mediumScores.size() < 10) {
-					mediumScores.add(i, score);
-					break;
-				}
-				else if (score <= mediumScores.get(i)) {
-					mediumScores.add(i, score);
-					mediumScores.remove(mediumScores.size() - 1);
-					break;
-				}
-			}
-			try {
-				FileWriter fw = new FileWriter("medium_scores.txt");
-        for (Integer mediumScore : mediumScores) {
-          fw.write(mediumScore + " ");
-        }
-				fw.close();
-			} catch (IOException e) {
-				System.out.println("Highscores file not found.");
-			}
-		}
-		else if (difficulty.equals("hard") && score < hardScores.get(hardScores.size() - 1)) {
-			for (int i = 0; i < hardScores.size(); i++) {
-				if (score <= hardScores.get(i) && hardScores.size() < 10) {
-					hardScores.add(i, score);
-					break;
-				}
-				else if (score <= hardScores.get(i)) {
-					hardScores.add(i, score);
-					hardScores.remove(hardScores.size() - 1);
-					break;
-				}
-			}
-			try {
-				FileWriter fw = new FileWriter("hard_scores.txt");
-        for (Integer hardScore : hardScores) {
-          fw.write(hardScore + " ");
-        }
-				fw.close();
-			} catch (IOException e) {
-				System.out.println("Highscores file not found.");
-			}
-		}
+
+    return frame;
 	}
 }

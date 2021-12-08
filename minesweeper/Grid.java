@@ -46,14 +46,14 @@ public class Grid {
 		columns = numColumns;
 		mines = numMines;
 		grid = new Cell[rows][columns];
-		
+
+    // Set up grid of cells and directional relationships
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				grid[i][j] = new Cell();
 				grid[i][j].setData(0);
 			}
 		}
-		
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				if (i == 0 && rows > 2) {
@@ -90,7 +90,8 @@ public class Grid {
 				}
 			}
 		}
-		
+
+    // Place mines randomly and increment adjacent cells
 		Random random = new Random();
 		int minesPlaced = 0;
 		while (minesPlaced < mines) {
