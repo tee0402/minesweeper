@@ -23,6 +23,7 @@ import javax.swing.border.*;
 public class InfoWindow extends JFrame{
   public static JTextField flagsLeftTextField;
 	private final JTextField timeElapsedTextField;
+  public static Timer timer;
 	
 	/*************************************************
 	 * 
@@ -49,22 +50,22 @@ public class InfoWindow extends JFrame{
 		contentPane.setLayout(null);
 		getContentPane().setLayout(null);
 
+    timeElapsedTextField = new JTextField();
+    timeElapsedTextField.setEditable(false);
+    timeElapsedTextField.setBounds(12, 21, 116, 22);
+    getContentPane().add(timeElapsedTextField);
+    timeElapsedTextField.setColumns(10);
+
     flagsLeftTextField = new JTextField();
     flagsLeftTextField.setText("Flags left: " + GridPanel.flags);
     flagsLeftTextField.setEditable(false);
-    flagsLeftTextField.setBounds(12, 21, 116, 22);
+    flagsLeftTextField.setBounds(12, 100, 116, 22);
 		getContentPane().add(flagsLeftTextField);
     flagsLeftTextField.setColumns(10);
 
-    timeElapsedTextField = new JTextField();
-    timeElapsedTextField.setEditable(false);
-    timeElapsedTextField.setBounds(12, 100, 116, 22);
-		getContentPane().add(timeElapsedTextField);
-    timeElapsedTextField.setColumns(10);
-
     Time.instantiate();
     timeElapsedTextField.setText("Time: " + Time.timeElapsed());
-		Timer timer = new Timer(1000, e -> timeElapsedTextField.setText("Time: " + Time.timeElapsed()));
+		timer = new Timer(1000, e -> timeElapsedTextField.setText("Time: " + Time.timeElapsed()));
 		timer.start();
 
     setVisible(true);

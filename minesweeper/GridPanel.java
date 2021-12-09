@@ -157,6 +157,7 @@ public class GridPanel extends JPanel
           }
         }
         // Show game over prompt
+        InfoWindow.timer.stop();
         int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
@@ -186,6 +187,7 @@ public class GridPanel extends JPanel
       }
 
       if (cellsLeft <= grid.getMines()) {
+        InfoWindow.timer.stop();
         int newHighscoreIndex = Highscores.checkHighscore(Game.difficulty, Time.timeElapsed());
         JFrame highscoreFrame = Highscores.highscoresWindow(Game.difficulty, newHighscoreIndex);
         int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
