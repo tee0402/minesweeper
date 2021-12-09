@@ -181,7 +181,7 @@ public class Grid {
 	 * 	Method:			getData
 	 * 
 	 * 	Description: 	returns the data the is in the requested cell. 
-	 * 					If can not be reached, returns -2
+	 * 					If cannot be reached, returns -2
 	 * 
 	 * 	param: 			int row, int column	
 	 * 
@@ -333,12 +333,12 @@ public class Grid {
 	 * 
 	 *************************************************/
 	private void revealInGUI(int row, int col) {
-    	GridPanel.guiGrid[row][col].removeAll();
-    	if (getData(row, col) > 0) {
-    		GridPanel.guiGrid[row][col].add(new JLabel(String.valueOf(getData(row, col)), SwingConstants.CENTER));
-    	}
-    	GridPanel.guiGrid[row][col].revalidate();
-    	GridPanel.guiGrid[row][col].repaint();
-    	GridPanel.cellsLeft--;
+    GridPanel.guiGrid[row][col].removeAll();
+    if (getData(row, col) > 0) {
+      GridPanel.guiGrid[row][col].add(new JLabel(String.valueOf(getData(row, col)), SwingConstants.CENTER));
+    }
+    GridPanel.guiGrid[row][col].revalidate();
+    GridPanel.guiGrid[row][col].repaint();
+    GridPanel.cellsLeft--;
 	}
 }

@@ -38,17 +38,13 @@ public class GameFrame extends JFrame
 	
 	public GameFrame(int rows, int cols, int mines)
 	{
-		Toolkit kit = Toolkit.getDefaultToolkit();
-		Dimension screenSize = kit.getScreenSize();
-		int screenHeight = screenSize.height;
-		int screenWidth = screenSize.width;
-		this.setResizable(false);
 		add(new GridPanel(rows, cols, mines));
-		setSize(rows * 30, cols * 30);
-		setLocation(screenWidth / 3, screenHeight / 4);
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setBounds(screenSize.width / 3, screenSize.height / 4, rows * 30, cols * 30);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setResizable(false);
 		setTitle("Minesweeper");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
 		
 		JMenu gameMenu = new JMenu("Game");
 		gameMenu.add(new AbstractAction("New Game")
@@ -63,40 +59,40 @@ public class GameFrame extends JFrame
 				{
 					public void actionPerformed(ActionEvent event)
 					{
-						Highscores.highscoresWindow();
+						Highscores.highscoresWindow(Game.difficulty, -1);
 					}
 				});
-		JMenu submenu = new JMenu("Change Difficulty");
-		gameMenu.add(submenu);
-		submenu.add(new AbstractAction("Easy")
-			{
-				public void actionPerformed(ActionEvent e)
-				{
-					Game.closeGame();
-					new Game("easy");
-				}	
-			});
-		submenu.add(new AbstractAction("Medium")
-			{
-				public void actionPerformed(ActionEvent event)
-				{
-					Game.closeGame();
-					new Game("medium");
-				}
-			});
-		submenu.add(new AbstractAction("Hard")
-			{
-				public void actionPerformed(ActionEvent event)
-				{
-					Game.closeGame();
-					new Game("hard");
-				}
-			});
+		JMenu changeDifficulty = new JMenu("Change Difficulty");
+    changeDifficulty.add(new AbstractAction("Easy")
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        Game.closeGame();
+        new Game("easy");
+      }
+    });
+    changeDifficulty.add(new AbstractAction("Medium")
+    {
+      public void actionPerformed(ActionEvent event)
+      {
+        Game.closeGame();
+        new Game("medium");
+      }
+    });
+    changeDifficulty.add(new AbstractAction("Hard")
+    {
+      public void actionPerformed(ActionEvent event)
+      {
+        Game.closeGame();
+        new Game("hard");
+      }
+    });
+		gameMenu.add(changeDifficulty);
 		gameMenu.add(new AbstractAction("Exit")
 			{
 				public void actionPerformed(ActionEvent event)
 				{
-					Game.closeGame();
+					System.exit(0);
 				}
 			});
 		
@@ -105,10 +101,10 @@ public class GameFrame extends JFrame
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					String message = "The object of the game is to reveal all the squares in the grid without clicking on a mine.\r\n\r\n" +
-					"Left click on a square to reveal its contents.\r\n" +
-					"Right click on a square to flag it.\r\n\r\n" +
-					"There are three pre-defined maps to play: easy, medium and hard.\r\n";
+					String message = "The objective of the game is to reveal all the squares in the grid without clicking on a mine.\r\n\r\n";
+          message += "Left click on a square to reveal its contents.\r\n";
+					message += "Right click on a square to flag it.\r\n\r\n";
+					message += "There are three pre-defined maps to play: easy, medium, and hard.\r\n";
 					JOptionPane.showMessageDialog(getParent(), message, "About Minesweeper", JOptionPane.INFORMATION_MESSAGE);
 				}
 			});
@@ -117,5 +113,7 @@ public class GameFrame extends JFrame
 		setJMenuBar(menuBar);
 		menuBar.add(gameMenu);
 		menuBar.add(helpMenu);
+
+    setVisible(true);
 	}
 }

@@ -74,7 +74,9 @@ public class GridPanel extends JPanel
 				JButton button = new JButton();
 				button.setIcon(tileImage);
 				guiGrid[i][j].add(button);
+        // Add left click handler
 				button.addActionListener(new ButtonHandler(i, j, grid));
+        // Add right click handler
 				button.addMouseListener(new MouseAdapter() {
 					/*************************************************
 					 * 
@@ -98,7 +100,7 @@ public class GridPanel extends JPanel
 								button.setIcon(tileImage);
 								flags++;
 							}
-							InfoWindow.txtFlagsLeft.setText("Flags left: " + GridPanel.flags);
+							InfoWindow.flagsLeftTextField.setText("Flags left: " + GridPanel.flags);
 						}
 					}
 				});
@@ -107,90 +109,95 @@ public class GridPanel extends JPanel
 	}
 	
 	static class ButtonHandler implements ActionListener {
-	    private final int row, col;
-	    private final Grid grid;
+    private final int row, col;
+    private final Grid grid;
 
-	    /*************************************************
-		 * 
-		 * 	Method:			ButtonHandler
-		 * 
-		 * 	Description: 	Constructor. Initializes variables.
-		 * 
-		 * 	param: 			int x, int y, Grid g	
-		 * 
-		 * 	return: 		none
-		 * 
-		 *************************************************/
-	    
-	    public ButtonHandler(int x, int y, Grid g) {
-	        row = x;
-	        col = y;
-	        grid = g;
-	    }
-	    
-	    /*************************************************
-		 * 
-		 * 	Method:			actionPerformed
-		 * 
-		 * 	Description: 	if button was clicked, end game
-		 * 					if it was a bomb and reveal square(s)
-		 * 					if it was a number
-		 * 
-		 * 	param: 			ActionEvent event	
-		 * 
-		 * 	return: 		none
-		 * 
-		 *************************************************/
-	    
-	    public void actionPerformed(ActionEvent event) {
-	        if (grid.getData(row, col) == -1) {
-	        	for (int i = 0; i < grid.getRows(); i++) {
-	        		for (int j = 0; j < grid.getColumns(); j++) {
-	        			if (grid.getData(i, j) == -1) {
-	        				JButton button = (JButton)guiGrid[i][j].getComponent(0);
-	        				button.setIcon(new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/mine.gif"))));
-	        			}
-	        		}
-	        	}
-	        	int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
-	            if (selection == JOptionPane.YES_OPTION) {
-	            	Game.closeGame();
-	            	new Game(Game.difficulty);
-	            }
-	            else if (selection == JOptionPane.NO_OPTION) {
-                System.exit(0);
-	            }
-	        }
-	        else if (grid.getData(row, col) == 0) {
-	        	grid.setHidden(row, col, false);
-	        	guiGrid[row][col].removeAll();
-	        	guiGrid[row][col].revalidate();
-            guiGrid[row][col].repaint();
-            cellsLeft--;
-	        	grid.reveal(grid.getCell(row, col), row, col);
-	        }
-	        else {
-            grid.setHidden(row, col, false);
-	        	guiGrid[row][col].removeAll();
-				    guiGrid[row][col].add(new JLabel(String.valueOf(grid.getData(row, col)), SwingConstants.CENTER));
-	        	guiGrid[row][col].revalidate();
-            guiGrid[row][col].repaint();
-            cellsLeft--;
-	        }
+    /*************************************************
+   *
+   * 	Method:			ButtonHandler
+   *
+   * 	Description: 	Constructor. Initializes variables.
+   *
+   * 	param: 			int x, int y, Grid g
+   *
+   * 	return: 		none
+   *
+   *************************************************/
 
-	        if (cellsLeft <= grid.getMines()) {
-	    		  Highscores.checkHighscore(Game.difficulty, Time.elapsedTime());
-            JFrame highscoreFrame = Highscores.highscoresWindow();
-	    		  int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
-            if (selection == JOptionPane.YES_OPTION) {
-              Game.closeGame();
-              highscoreFrame.dispose();
-              new Game(Game.difficulty);
+    public ButtonHandler(int x, int y, Grid g) {
+      row = x;
+      col = y;
+      grid = g;
+    }
+
+    /*************************************************
+   *
+   * 	Method:			actionPerformed
+   *
+   * 	Description: 	if button was clicked, end game
+   * 					if it was a mine and reveal square(s)
+   * 					if it was a number
+   *
+   * 	param: 			ActionEvent event
+   *
+   * 	return: 		none
+   *
+   *************************************************/
+
+    public void actionPerformed(ActionEvent event) {
+      // Clicked mine
+      if (grid.getData(row, col) == -1) {
+        // Show all mines
+        for (int i = 0; i < grid.getRows(); i++) {
+          for (int j = 0; j < grid.getColumns(); j++) {
+            if (grid.getData(i, j) == -1) {
+              JButton button = (JButton) guiGrid[i][j].getComponent(0);
+              button.setIcon(new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/mine.gif"))));
             }
-            else if (selection == JOptionPane.NO_OPTION) {
-              Game.closeGame();
-            }
-	        }
-	    }
+          }
+        }
+        // Show game over prompt
+        int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
+        if (selection == JOptionPane.YES_OPTION) {
+          Game.closeGame();
+          new Game(Game.difficulty);
+        }
+        else if (selection == JOptionPane.NO_OPTION) {
+          System.exit(0);
+        }
+      }
+      // Clicked empty cell
+      else if (grid.getData(row, col) == 0) {
+        grid.setHidden(row, col, false);
+        guiGrid[row][col].removeAll();
+        guiGrid[row][col].revalidate();
+        guiGrid[row][col].repaint();
+        cellsLeft--;
+        grid.reveal(grid.getCell(row, col), row, col);
+      }
+      // Clicked number
+      else {
+        grid.setHidden(row, col, false);
+        guiGrid[row][col].removeAll();
+        guiGrid[row][col].add(new JLabel(String.valueOf(grid.getData(row, col)), SwingConstants.CENTER));
+        guiGrid[row][col].revalidate();
+        guiGrid[row][col].repaint();
+        cellsLeft--;
+      }
+
+      if (cellsLeft <= grid.getMines()) {
+        int newHighscoreIndex = Highscores.checkHighscore(Game.difficulty, Time.timeElapsed());
+        JFrame highscoreFrame = Highscores.highscoresWindow(Game.difficulty, newHighscoreIndex);
+        int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
+        if (selection == JOptionPane.YES_OPTION) {
+          Game.closeGame();
+          highscoreFrame.dispose();
+          new Game(Game.difficulty);
+        }
+        else if (selection == JOptionPane.NO_OPTION) {
+          Game.closeGame();
+        }
+      }
+    }
 	}
 }

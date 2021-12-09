@@ -36,17 +36,17 @@ public class Time {
 	
 	/*************************************************
 	 * 
-	 * 	Method:			elapsedTime
+	 * 	Method:			timeElapsed
 	 * 
-	 * 	Description: 	stops the timer and returns the elapsed time in seconds
+	 * 	Description: 	stops the timer and returns the time elapsed in seconds
 	 * 
 	 * 	param: 			none	
 	 * 
-	 * 	return: 		elapsed time in seconds
+	 * 	return: 		time elapsed in seconds
 	 * 
 	 *************************************************/
 	
-	public static int elapsedTime() {
+	public static int timeElapsed() {
 		long endTime = System.currentTimeMillis();
 		return (int) ((endTime - startTime) / 1000);
 	}

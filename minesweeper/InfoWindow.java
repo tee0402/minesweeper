@@ -21,9 +21,8 @@ import javax.swing.border.*;
  **********************************************************************************************/
 
 public class InfoWindow extends JFrame{
-  public static JTextField txtFlagsLeft;
-	private final JTextField txtTime;
-	Timer timer;
+  public static JTextField flagsLeftTextField;
+	private final JTextField timeElapsedTextField;
 	
 	/*************************************************
 	 * 
@@ -40,32 +39,34 @@ public class InfoWindow extends JFrame{
 	
 	public InfoWindow()
 	{
-		Toolkit kit = Toolkit.getDefaultToolkit();
-		Dimension screenSize = kit.getScreenSize();
-		int screenHeight = screenSize.height;
-		int screenWidth = screenSize.width;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(screenWidth * 4 / 5, screenHeight / 4, 166, 189);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(screenSize.width * 4 / 5, screenSize.height / 4, 166, 189);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 		getContentPane().setLayout(null);
-		txtFlagsLeft = new JTextField();
-		txtFlagsLeft.setText("Flags left: " + GridPanel.flags);
-		txtFlagsLeft.setEditable(false);
-		txtFlagsLeft.setBounds(12, 21, 116, 22);
-		getContentPane().add(txtFlagsLeft);
-		txtFlagsLeft.setColumns(10);
-		
-		txtTime = new JTextField();
-		txtTime.setEditable(false);
-		txtTime.setBounds(12, 100, 116, 22);
-		getContentPane().add(txtTime);
-		txtTime.setColumns(10);
-		setVisible(true);
-		timer = new Timer(1000, e -> txtTime.setText("Time: " + Time.elapsedTime()));
+
+    flagsLeftTextField = new JTextField();
+    flagsLeftTextField.setText("Flags left: " + GridPanel.flags);
+    flagsLeftTextField.setEditable(false);
+    flagsLeftTextField.setBounds(12, 21, 116, 22);
+		getContentPane().add(flagsLeftTextField);
+    flagsLeftTextField.setColumns(10);
+
+    timeElapsedTextField = new JTextField();
+    timeElapsedTextField.setEditable(false);
+    timeElapsedTextField.setBounds(12, 100, 116, 22);
+		getContentPane().add(timeElapsedTextField);
+    timeElapsedTextField.setColumns(10);
+
+    Time.instantiate();
+    timeElapsedTextField.setText("Time: " + Time.timeElapsed());
+		Timer timer = new Timer(1000, e -> timeElapsedTextField.setText("Time: " + Time.timeElapsed()));
 		timer.start();
+
+    setVisible(true);
 	}
 }

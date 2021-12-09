@@ -85,29 +85,38 @@ public class Highscores {
    *
    *************************************************/
 
-  public static void checkHighscore(String difficulty, int score) {
+  public static int checkHighscore(String difficulty, int score) {
+    int newHighscoreIndex = -1;
     if (difficulty.equals("easy") && (easyScores.size() == 0 || easyScores.size() < 10 || score < easyScores.get(easyScores.size() - 1))) {
-      addHighscore(score, easyScores);
+      newHighscoreIndex = addHighscore(score, easyScores);
       writeHighscores(easyScores, "easy_scores.txt");
     }
     else if (difficulty.equals("medium") && (mediumScores.size() == 0 || mediumScores.size() < 10 || score < mediumScores.get(mediumScores.size() - 1))) {
-      addHighscore(score, mediumScores);
+      newHighscoreIndex = addHighscore(score, mediumScores);
       writeHighscores(mediumScores, "medium_scores.txt");
     }
     else if (difficulty.equals("hard") && (hardScores.size() == 0 || hardScores.size() < 10 || score < hardScores.get(hardScores.size() - 1))) {
-      addHighscore(score, hardScores);
+      newHighscoreIndex = addHighscore(score, hardScores);
       writeHighscores(hardScores, "hard_scores.txt");
     }
+    return newHighscoreIndex;
   }
 
-  public static void addHighscore(int score, ArrayList<Integer> highscores) {
-    if (highscores.size() == 0 || (highscores.size() < 10 && score >= highscores.get(highscores.size() - 1))) {
+  public static int addHighscore(int score, ArrayList<Integer> highscores) {
+    int newHighScoreIndex = -1;
+    if (highscores.size() == 0) {
       highscores.add(score);
+      newHighScoreIndex = 0;
+    }
+    else if (highscores.size() < 10 && score >= highscores.get(highscores.size() - 1)) {
+      highscores.add(score);
+      newHighScoreIndex = highscores.size() - 1;
     }
     else {
       for (int i = 0; i < highscores.size(); i++) {
         if (score < highscores.get(i)) {
           highscores.add(i, score);
+          newHighScoreIndex = i;
           if (highscores.size() == 11) {
             highscores.remove(10);
           }
@@ -115,6 +124,7 @@ public class Highscores {
         }
       }
     }
+    return newHighScoreIndex;
   }
 
   public static void writeHighscores(ArrayList<Integer> highscores, String highscoresFile) {
@@ -136,18 +146,17 @@ public class Highscores {
 	 * 	Description: 	creates a new window containing the the local
 	 * 					high scores
 	 * 
-	 * 	param: 			none	
+	 * 	param: 			index of new highscore
 	 * 
 	 * 	return: 		frame of new window
 	 * 
 	 *************************************************/
 	
-	public static JFrame highscoresWindow() {
+	public static JFrame highscoresWindow(String difficulty, int newHighscoreIndex) {
 		JFrame frame = new JFrame("Highscores");
-		frame.setSize(400, 500);
-		frame.setLocation(2 * (int)Menu.screenWidth / 5, (int)Menu.screenHeight / 4);
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    frame.setBounds(2 * screenSize.width / 5, screenSize.height / 4, 400, 500);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(11, 4));
@@ -167,6 +176,9 @@ public class Highscores {
 		for (int i = 0; i < 10; i++) {
 			if (i < easyScores.size()) {
         scoreLabel = new JLabel((i + 1) + ".       " + easyScores.get(i));
+        if (difficulty.equals("easy") && i == newHighscoreIndex) {
+          scoreLabel.setForeground(Color.red);
+        }
 			}
 			else {
         scoreLabel = new JLabel((i + 1) + ".       ");
@@ -176,6 +188,9 @@ public class Highscores {
 			if (i < mediumScores.size()) {
         scoreLabel = new JLabel(String.valueOf(mediumScores.get(i)), SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        if (difficulty.equals("medium") && i == newHighscoreIndex) {
+          scoreLabel.setForeground(Color.red);
+        }
 			}
 			else {
         scoreLabel = new JLabel();
@@ -184,6 +199,9 @@ public class Highscores {
 			if (i < hardScores.size()) {
         scoreLabel = new JLabel(String.valueOf(hardScores.get(i)), SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        if (difficulty.equals("hard") && i == newHighscoreIndex) {
+          scoreLabel.setForeground(Color.red);
+        }
 			}
 			else {
         scoreLabel = new JLabel();
@@ -191,6 +209,7 @@ public class Highscores {
       panel.add(scoreLabel);
 		}
 
+    frame.setVisible(true);
     return frame;
 	}
 }

@@ -1,5 +1,3 @@
-import javax.swing.JLabel;
-
 /******************************************************************************************
  * 
  * 	NAME:			Iao Seng Sio and Sollie Garcia
@@ -70,11 +68,6 @@ public class Game {
 		gameFrame = new GameFrame(rows, cols, mines);
 		infoWindow = new InfoWindow();
 		gameFrame.setVisible(true);
-		JLabel timeLabel = new JLabel();
-		gameFrame.add(timeLabel);
-		Time.instantiate();
-		int time = Time.elapsedTime();
-		timeLabel.setText(String.valueOf(time));
 	}
 	
 	/*************************************************
