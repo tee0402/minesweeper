@@ -56,37 +56,37 @@ public class GameFrame extends JFrame
 				}
 			});
 		gameMenu.add(new AbstractAction("Highscores")
-				{
-					public void actionPerformed(ActionEvent event)
-					{
-						Highscores.highscoresWindow(Game.difficulty, -1);
-					}
-				});
+      {
+        public void actionPerformed(ActionEvent event)
+        {
+          Highscores.highscoresWindow(Game.difficulty, -1);
+        }
+      });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
     changeDifficulty.add(new AbstractAction("Easy")
-    {
-      public void actionPerformed(ActionEvent e)
       {
-        Game.closeGame();
-        new Game("easy");
-      }
-    });
+        public void actionPerformed(ActionEvent e)
+        {
+          Game.closeGame();
+          new Game("easy");
+        }
+      });
     changeDifficulty.add(new AbstractAction("Medium")
-    {
-      public void actionPerformed(ActionEvent event)
       {
-        Game.closeGame();
-        new Game("medium");
-      }
-    });
+        public void actionPerformed(ActionEvent event)
+        {
+          Game.closeGame();
+          new Game("medium");
+        }
+      });
     changeDifficulty.add(new AbstractAction("Hard")
-    {
-      public void actionPerformed(ActionEvent event)
       {
-        Game.closeGame();
-        new Game("hard");
-      }
-    });
+        public void actionPerformed(ActionEvent event)
+        {
+          Game.closeGame();
+          new Game("hard");
+        }
+      });
 		gameMenu.add(changeDifficulty);
 		gameMenu.add(new AbstractAction("Exit")
 			{

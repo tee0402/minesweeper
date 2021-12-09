@@ -58,21 +58,17 @@ public class Grid {
 			for (int j = 0; j < columns; j++) {
 				if (i == 0 && rows > 2) {
 					grid[i][j].setSouth(grid[i + 1][j]);
-				}
-				else if (i == rows - 1) {
+				} else if (i == rows - 1) {
 					grid[i][j].setNorth(grid[i - 1][j]);
-				}
-				else {
+				} else {
 					grid[i][j].setSouth(grid[i + 1][j]);
 					grid[i][j].setNorth(grid[i - 1][j]);
 				}
 				if (j == 0 && columns > 2) {
 					grid[i][j].setEast(grid[i][j + 1]);
-				}
-				else if (j == columns - 1) {
+				} else if (j == columns - 1) {
 					grid[i][j].setWest(grid[i][j - 1]);
-				}
-				else {
+				} else {
 					grid[i][j].setEast(grid[i][j + 1]);
 					grid[i][j].setWest(grid[i][j - 1]);
 				}

@@ -90,12 +90,10 @@ public class Highscores {
     if (difficulty.equals("easy") && (easyScores.size() == 0 || easyScores.size() < 10 || score < easyScores.get(easyScores.size() - 1))) {
       newHighscoreIndex = addHighscore(score, easyScores);
       writeHighscores(easyScores, "easy_scores.txt");
-    }
-    else if (difficulty.equals("medium") && (mediumScores.size() == 0 || mediumScores.size() < 10 || score < mediumScores.get(mediumScores.size() - 1))) {
+    } else if (difficulty.equals("medium") && (mediumScores.size() == 0 || mediumScores.size() < 10 || score < mediumScores.get(mediumScores.size() - 1))) {
       newHighscoreIndex = addHighscore(score, mediumScores);
       writeHighscores(mediumScores, "medium_scores.txt");
-    }
-    else if (difficulty.equals("hard") && (hardScores.size() == 0 || hardScores.size() < 10 || score < hardScores.get(hardScores.size() - 1))) {
+    } else if (difficulty.equals("hard") && (hardScores.size() == 0 || hardScores.size() < 10 || score < hardScores.get(hardScores.size() - 1))) {
       newHighscoreIndex = addHighscore(score, hardScores);
       writeHighscores(hardScores, "hard_scores.txt");
     }
@@ -107,12 +105,10 @@ public class Highscores {
     if (highscores.size() == 0) {
       highscores.add(score);
       newHighScoreIndex = 0;
-    }
-    else if (highscores.size() < 10 && score >= highscores.get(highscores.size() - 1)) {
+    } else if (highscores.size() < 10 && score >= highscores.get(highscores.size() - 1)) {
       highscores.add(score);
       newHighScoreIndex = highscores.size() - 1;
-    }
-    else {
+    } else {
       for (int i = 0; i < highscores.size(); i++) {
         if (score < highscores.get(i)) {
           highscores.add(i, score);
@@ -179,8 +175,7 @@ public class Highscores {
         if (difficulty.equals("easy") && i == newHighscoreIndex) {
           scoreLabel.setForeground(Color.red);
         }
-			}
-			else {
+			} else {
         scoreLabel = new JLabel((i + 1) + ".       ");
 			}
       scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
@@ -191,8 +186,7 @@ public class Highscores {
         if (difficulty.equals("medium") && i == newHighscoreIndex) {
           scoreLabel.setForeground(Color.red);
         }
-			}
-			else {
+			} else {
         scoreLabel = new JLabel();
 			}
       panel.add(scoreLabel);
@@ -202,8 +196,7 @@ public class Highscores {
         if (difficulty.equals("hard") && i == newHighscoreIndex) {
           scoreLabel.setForeground(Color.red);
         }
-			}
-			else {
+			} else {
         scoreLabel = new JLabel();
 			}
       panel.add(scoreLabel);

@@ -95,8 +95,7 @@ public class GridPanel extends JPanel
 							if (button.getIcon().equals(tileImage) && flags > 0) {
 								button.setIcon(flagImage);
 								flags--;
-							}
-							else if (button.getIcon().equals(flagImage)) {
+							} else if (button.getIcon().equals(flagImage)) {
 								button.setIcon(tileImage);
 								flags++;
 							}
@@ -162,8 +161,7 @@ public class GridPanel extends JPanel
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
           new Game(Game.difficulty);
-        }
-        else if (selection == JOptionPane.NO_OPTION) {
+        } else if (selection == JOptionPane.NO_OPTION) {
           System.exit(0);
         }
       }
@@ -195,8 +193,7 @@ public class GridPanel extends JPanel
           Game.closeGame();
           highscoreFrame.dispose();
           new Game(Game.difficulty);
-        }
-        else if (selection == JOptionPane.NO_OPTION) {
+        } else if (selection == JOptionPane.NO_OPTION) {
           Game.closeGame();
         }
       }
