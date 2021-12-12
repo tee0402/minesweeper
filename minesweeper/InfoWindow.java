@@ -2,44 +2,13 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-/******************************************************************************************
- * 
- * 	NAME:			Iao Seng Sio and Sollie Garcia
- * 
- * 	HOMEWORK: 		MineSweeper Project
- * 
- * 	CLASS:			ICS 211
- * 
- * 	INSTRUCTOR:		Scott Robertson
- * 
- *	DATE: 			May 4, 2016
- * 
- *	FILENAMES: 		InfoWindow
- *
- *	DESCRIPTION: 	creates the game window that shows the amount of flags left and shows the timer.
- *
- **********************************************************************************************/
-
-public class InfoWindow extends JFrame{
-  public static JTextField flagsLeftTextField;
+class InfoWindow extends JFrame{
+  static JTextField flagsLeftTextField;
 	private final JTextField timeElapsedTextField;
-  public static Timer timer;
+  static Time time;
+  static Timer timer;
 	
-	/*************************************************
-	 * 
-	 * 	Method:			InfoWindow
-	 * 
-	 * 	Description: 	Constructor. Creates the window 
-	 * 					that contains the amount of flags left and shows the timer
-	 * 
-	 * 	param: 			none
-	 * 
-	 * 	return: 		none
-	 * 
-	 *************************************************/
-	
-	public InfoWindow()
-	{
+	InfoWindow() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(screenSize.width * 4 / 5, screenSize.height / 4, 166, 189);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,9 +32,9 @@ public class InfoWindow extends JFrame{
 		getContentPane().add(flagsLeftTextField);
     flagsLeftTextField.setColumns(10);
 
-    Time.instantiate();
-    timeElapsedTextField.setText("Time: " + Time.timeElapsed());
-		timer = new Timer(1000, e -> timeElapsedTextField.setText("Time: " + Time.timeElapsed()));
+    time = new Time();
+    timeElapsedTextField.setText("Time: " + time.timeElapsed());
+		timer = new Timer(100, e -> timeElapsedTextField.setText("Time: " + time.timeElapsed()));
 		timer.start();
 
     setVisible(true);

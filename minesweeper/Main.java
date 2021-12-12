@@ -1,26 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-/******************************************************************************************
-	 * 
-	 * 	NAME:			Iao Seng Sio and Sollie Garcia
-	 * 
-	 * 	HOMEWORK: 		MineSweeper Project
-	 * 
-	 * 	CLASS:			ICS 211
-	 * 
-	 * 	INSTRUCTOR:		Scott Robertson
-	 * 
-	 *	DATE: 			May 4, 2016
-	 * 
-	 *	FILENAMES: 		Main.java
-	 *
-	 *	DESCRIPTION: 	This file starts the main menu of the game.
-	 *
-	 **********************************************************************************************/
-
-public class Main {
-	
+class Main {
 	public static void main(String[] args) {
     JFrame frame = new JFrame("Minesweeper");
     int width = 500;

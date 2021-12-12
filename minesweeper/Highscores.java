@@ -1,47 +1,15 @@
 import java.util.*;
 import java.awt.*;
 import java.io.*;
-
 import javax.swing.*;
 
-/******************************************************************************************
- * 
- * 	NAME:			Iao Seng Sio and Sollie Garcia
- * 
- * 	HOMEWORK: 		MineSweeper Project
- * 
- * 	CLASS:			ICS 211
- * 
- * 	INSTRUCTOR:		Scott Robertson
- * 
- *	DATE: 			May 4, 2016
- * 
- *	FILENAMES: 		highscores.java
- *
- *	DESCRIPTION: 	contains the methods for writing to the highscores to a file
- *
- **********************************************************************************************/
-
-public class Highscores {
-
-	private static ArrayList<Integer> easyScores;
-	private static ArrayList<Integer> mediumScores;
-	private static ArrayList<Integer> hardScores;
-	
-	/*************************************************
-	 * 
-	 * 	Method:			instantiate
-	 * 
-	 * 	Description: 	contains all the scanners for the file writing of the different difficulties.
-	 * 
-	 * 	param: 			none	
-	 * 
-	 * 	return: 		none
-	 * 
-	 *************************************************/
+class Highscores {
+	private final ArrayList<Integer> easyScores;
+	private final ArrayList<Integer> mediumScores;
+	private final ArrayList<Integer> hardScores;
 	
 	@SuppressWarnings("ResultOfMethodCallIgnored")
-  public static void instantiate() {
+  Highscores() {
 		easyScores = new ArrayList<>();
 		mediumScores = new ArrayList<>();
 		hardScores = new ArrayList<>();
@@ -73,19 +41,7 @@ public class Highscores {
 		}
 	}
 
-  /*************************************************
-   *
-   * 	Method:			checkHighscore
-   *
-   * 	Description: 	writes the score in the correct position in the list
-   *
-   * 	param: 			String difficulty, int score
-   *
-   * 	return: 		none
-   *
-   *************************************************/
-
-  public static int checkHighscore(String difficulty, int score) {
+  int checkHighscore(String difficulty, int score) {
     int newHighscoreIndex = -1;
     int numEasyScores = easyScores.size();
     int numMediumScores = mediumScores.size();
@@ -103,7 +59,7 @@ public class Highscores {
     return newHighscoreIndex;
   }
 
-  public static int addHighscore(int score, ArrayList<Integer> highscores) {
+  private int addHighscore(int score, ArrayList<Integer> highscores) {
     int newHighScoreIndex = -1;
     if (highscores.size() == 0) {
       highscores.add(score);
@@ -126,7 +82,7 @@ public class Highscores {
     return newHighScoreIndex;
   }
 
-  public static void writeHighscores(ArrayList<Integer> highscores, String highscoresFile) {
+  private void writeHighscores(ArrayList<Integer> highscores, String highscoresFile) {
     try {
       FileWriter fw = new FileWriter(highscoresFile);
       for (Integer highscore : highscores) {
@@ -138,20 +94,7 @@ public class Highscores {
     }
   }
 	
-	/*************************************************
-	 * 
-	 * 	Method:			highscoresWindow
-	 * 
-	 * 	Description: 	creates a new window containing the the local
-	 * 					high scores
-	 * 
-	 * 	param: 			index of new highscore
-	 * 
-	 * 	return: 		frame of new window
-	 * 
-	 *************************************************/
-	
-	public static JFrame highscoresWindow(String difficulty, int newHighscoreIndex) {
+	JFrame highscoresWindow(String difficulty, int newHighscoreIndex) {
 		JFrame frame = new JFrame("Highscores");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setBounds(2 * screenSize.width / 5, screenSize.height / 4, 400, 500);

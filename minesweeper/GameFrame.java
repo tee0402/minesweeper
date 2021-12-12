@@ -2,46 +2,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-/******************************************************************************************
- * 
- * 	NAME:			Iao Seng Sio and Sollie Garcia
- * 
- * 	HOMEWORK: 		MineSweeper Project
- * 
- * 	CLASS:			ICS 211
- * 
- * 	INSTRUCTOR:		Scott Robertson
- * 
- *	DATE: 			May 4, 2016
- * 
- *	FILENAMES: 		GameFrame.java
- *
- *	DESCRIPTION: 	This file creates the frame of the game and its menus
- *
- **********************************************************************************************/
-
-public class GameFrame extends JFrame
-{
-	
-	/*************************************************
-	 * 
-	 * 	Method:			GameFrame
-	 * 
-	 * 	Description: 	Constructor. Creates the frame
-	 * 					and the menus
-	 * 
-	 * 	param: 			int rows, int cols, int mines	
-	 * 
-	 * 	return: 		none
-	 * 
-	 *************************************************/
-	
-	public GameFrame(int rows, int cols, int mines)
-	{
-		add(new GridPanel(rows, cols, mines));
+class GameFrame extends JFrame {
+	GameFrame(int rows, int columns, int mines) {
+		add(new GridPanel(rows, columns, mines));
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    setBounds(screenSize.width / 3, screenSize.height / 4, rows * 30, cols * 30);
+    setBounds(screenSize.width / 3, screenSize.height / 4, rows * 30, columns * 30);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
 		setTitle("Minesweeper");
@@ -59,7 +25,7 @@ public class GameFrame extends JFrame
       {
         public void actionPerformed(ActionEvent event)
         {
-          Highscores.highscoresWindow(Game.difficulty, -1);
+          Game.highscores.highscoresWindow(Game.difficulty, -1);
         }
       });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
