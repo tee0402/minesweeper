@@ -5,9 +5,9 @@ class Grid {
 	private final int rows;
   private final int columns;
 
-  Grid(int numRows, int numColumns, int numMines) {
-		rows = numRows;
-		columns = numColumns;
+  Grid(int rows, int columns, int mines) {
+		this.rows = rows;
+		this.columns = columns;
     grid = new Cell[rows][columns];
 
     // Set up grid of cells
@@ -21,7 +21,7 @@ class Grid {
     // Place mines randomly
 		Random random = new Random();
 		int minesPlaced = 0;
-		while (minesPlaced < numMines) {
+		while (minesPlaced < mines) {
 			int mineX = random.nextInt(rows);
 			int mineY = random.nextInt(columns);
       // If the cell at the new random coordinates is not already a mine, place a mine there and increment adjacent cells

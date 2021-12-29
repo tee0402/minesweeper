@@ -2,7 +2,8 @@ class Game {
 	static String difficulty;
   static Highscores highscores;
 	private static GameFrame gameFrame;
-	private static InfoWindow infoWindow;
+  static Time time;
+	static InfoWindow infoWindow;
 	
 	Game(String newDifficulty) {
 		difficulty = newDifficulty;
@@ -19,11 +20,11 @@ class Game {
 		}
 	}
 	
-	private void startGame(int rows, int columns, int mines)
-	{
+	private void startGame(int rows, int columns, int mines) {
     highscores = new Highscores();
 		gameFrame = new GameFrame(rows, columns, mines);
-		infoWindow = new InfoWindow();
+    time = new Time();
+		infoWindow = new InfoWindow(mines, time);
 		gameFrame.setVisible(true);
 	}
 	

@@ -5,8 +5,8 @@ class Cell {
 	int getData() {
 		return data;
 	}
-	void setData(int newData) {
-		data = newData;
+	void setData(int data) {
+		this.data = data;
 	}
 	
 	boolean getRevealed() {

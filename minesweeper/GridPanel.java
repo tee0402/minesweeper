@@ -7,19 +7,18 @@ import javax.swing.*;
 import javax.imageio.*;
 
 class GridPanel extends JPanel {
-  static int flags;
-	static int cellsLeft;
+  private final int rows, columns, mines;
+  private int flagsLeft;
+	private static int cellsLeft;
   private static Grid grid;
 	private static JPanel[][] gridPanel;
-	int rows, columns, mines;
-  ImageIcon flagImage;
-	ImageIcon tileImage = new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/tile.jpg")));
+  private ImageIcon flagImage;
+	private final ImageIcon tileImage = new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/tile.jpg")));
 
-	GridPanel(int numRows, int numColumns, int numMines) {
-		rows = numRows;
-    columns = numColumns;
-		mines = numMines;
-		flags = mines;
+	GridPanel(int rows, int columns, int mines) {
+		this.rows = rows;
+    this.columns = columns;
+		this.mines = flagsLeft = mines;
     grid = new Grid(rows, columns, mines);
     gridPanel = new JPanel[rows][columns];
     cellsLeft = rows * columns;
@@ -58,14 +57,14 @@ class GridPanel extends JPanel {
 					 *************************************************/
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
-							if (button.getIcon().equals(tileImage) && flags > 0) {
+							if (button.getIcon().equals(tileImage) && flagsLeft > 0) {
 								button.setIcon(flagImage);
-								flags--;
+                flagsLeft--;
 							} else if (button.getIcon().equals(flagImage)) {
 								button.setIcon(tileImage);
-								flags++;
+                flagsLeft++;
 							}
-							InfoWindow.flagsLeftTextField.setText("Flags left: " + flags);
+							Game.infoWindow.setFlagsLeftTextField(flagsLeft);
 						}
 					}
 				});
@@ -83,7 +82,7 @@ class GridPanel extends JPanel {
     cellsLeft--;
   }
 
-  void showAllMines() {
+  private void showAllMines() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
         if (grid.getData(i, j) == -1) {
@@ -94,7 +93,7 @@ class GridPanel extends JPanel {
     }
   }
 	
-	class ButtonHandler implements ActionListener {
+	private class ButtonHandler implements ActionListener {
     private final int row, column;
 
     ButtonHandler(int x, int y) {
@@ -108,7 +107,7 @@ class GridPanel extends JPanel {
       if (grid.getData(row, column) == -1) {
         showAllMines();
         // Show game over prompt
-        InfoWindow.timer.stop();
+        Game.infoWindow.stopTimeUpdates();
         int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
@@ -124,8 +123,8 @@ class GridPanel extends JPanel {
 
       if (cellsLeft <= mines) {
         showAllMines();
-        int newHighscoreIndex = Game.highscores.checkHighscore(Game.difficulty, InfoWindow.time.timeElapsed());
-        InfoWindow.timer.stop();
+        int newHighscoreIndex = Game.highscores.checkHighscore(Game.difficulty, Game.time.timeElapsed());
+        Game.infoWindow.stopTimeUpdates();
         JFrame highscoreFrame = Game.highscores.highscoresWindow(Game.difficulty, newHighscoreIndex);
         int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
         if (selection == JOptionPane.YES_OPTION) {

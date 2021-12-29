@@ -2,13 +2,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-class InfoWindow extends JFrame{
-  static JTextField flagsLeftTextField;
-	private final JTextField timeElapsedTextField;
-  static Time time;
-  static Timer timer;
+class InfoWindow extends JFrame {
+  private final JTextField flagsLeftTextField, timeElapsedTextField;
+  private final Timer timer;
 	
-	InfoWindow() {
+	InfoWindow(int flagsLeft, Time time) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(screenSize.width * 4 / 5, screenSize.height / 4, 166, 189);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,17 +24,24 @@ class InfoWindow extends JFrame{
     timeElapsedTextField.setColumns(10);
 
     flagsLeftTextField = new JTextField();
-    flagsLeftTextField.setText("Flags left: " + GridPanel.flags);
+    setFlagsLeftTextField(flagsLeft);
     flagsLeftTextField.setEditable(false);
     flagsLeftTextField.setBounds(12, 100, 116, 22);
 		getContentPane().add(flagsLeftTextField);
     flagsLeftTextField.setColumns(10);
 
-    time = new Time();
     timeElapsedTextField.setText("Time: " + time.timeElapsed());
 		timer = new Timer(100, e -> timeElapsedTextField.setText("Time: " + time.timeElapsed()));
 		timer.start();
 
     setVisible(true);
 	}
+
+  void setFlagsLeftTextField(int flagsLeft) {
+    flagsLeftTextField.setText("Flags left: " + flagsLeft);
+  }
+
+  void stopTimeUpdates() {
+    timer.stop();
+  }
 }
