@@ -85,7 +85,7 @@ class HighScores {
   }
 	
 	JFrame highScoresWindow(String difficulty, int newHighScoreIndex) {
-		JFrame frame = new JFrame("High scores");
+		JFrame frame = new JFrame("High Scores");
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setBounds(2 * screenSize.width / 5, screenSize.height / 4, 400, 500);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

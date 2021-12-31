@@ -19,7 +19,7 @@ class GameFrame extends JFrame {
 					new Game(Game.difficulty);
 				}
 			});
-		gameMenu.add(new AbstractAction("Highscores") {
+		gameMenu.add(new AbstractAction("High Scores") {
         public void actionPerformed(ActionEvent event)
         {
           Game.highScores.highScoresWindow(Game.difficulty, -1);
