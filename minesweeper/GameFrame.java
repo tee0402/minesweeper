@@ -13,49 +13,39 @@ class GameFrame extends JFrame {
 		setTitle("Minesweeper");
 		
 		JMenu gameMenu = new JMenu("Game");
-		gameMenu.add(new AbstractAction("New Game")
-			{
-				public void actionPerformed(ActionEvent event)
-				{
+		gameMenu.add(new AbstractAction("New Game") {
+				public void actionPerformed(ActionEvent event) {
 					Game.closeGame();
 					new Game(Game.difficulty);
 				}
 			});
-		gameMenu.add(new AbstractAction("Highscores")
-      {
+		gameMenu.add(new AbstractAction("Highscores") {
         public void actionPerformed(ActionEvent event)
         {
-          Game.highscores.highscoresWindow(Game.difficulty, -1);
+          Game.highScores.highScoresWindow(Game.difficulty, -1);
         }
       });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
-    changeDifficulty.add(new AbstractAction("Easy")
-      {
-        public void actionPerformed(ActionEvent e)
-        {
+    changeDifficulty.add(new AbstractAction("Easy") {
+        public void actionPerformed(ActionEvent e) {
           Game.closeGame();
           new Game("easy");
         }
       });
-    changeDifficulty.add(new AbstractAction("Medium")
-      {
-        public void actionPerformed(ActionEvent event)
-        {
+    changeDifficulty.add(new AbstractAction("Medium") {
+        public void actionPerformed(ActionEvent event) {
           Game.closeGame();
           new Game("medium");
         }
       });
-    changeDifficulty.add(new AbstractAction("Hard")
-      {
-        public void actionPerformed(ActionEvent event)
-        {
+    changeDifficulty.add(new AbstractAction("Hard") {
+        public void actionPerformed(ActionEvent event) {
           Game.closeGame();
           new Game("hard");
         }
       });
 		gameMenu.add(changeDifficulty);
-		gameMenu.add(new AbstractAction("Exit")
-			{
+		gameMenu.add(new AbstractAction("Exit") {
 				public void actionPerformed(ActionEvent event)
 				{
 					System.exit(0);
@@ -63,10 +53,8 @@ class GameFrame extends JFrame {
 			});
 		
 		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(new AbstractAction("Instructions")
-			{
-				public void actionPerformed(ActionEvent e)
-				{
+		helpMenu.add(new AbstractAction("Instructions") {
+				public void actionPerformed(ActionEvent e) {
 					String message = "The objective of the game is to reveal all the squares in the grid without clicking on a mine.\r\n\r\n";
           message += "Left click on a square to reveal its contents.\r\n";
 					message += "Right click on a square to flag it.\r\n\r\n";

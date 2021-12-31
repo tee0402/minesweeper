@@ -43,18 +43,6 @@ class GridPanel extends JPanel {
 				button.addActionListener(new ButtonHandler(i, j));
         // Add right click handler
 				button.addMouseListener(new MouseAdapter() {
-					/*************************************************
-					 * 
-					 * 	Method:			mouseClicked
-					 * 
-					 * 	Description: 	if right click is pressed on a button, add a flag 
-					 * 					and if a flag already exists, delete the flag
-					 * 
-					 * 	param: 			MouseEvent e	
-					 * 
-					 * 	return: 		none
-					 * 
-					 *************************************************/
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
 							if (button.getIcon().equals(tileImage) && flagsLeft > 0) {
@@ -123,13 +111,13 @@ class GridPanel extends JPanel {
 
       if (cellsLeft <= mines) {
         showAllMines();
-        int newHighscoreIndex = Game.highscores.checkHighscore(Game.difficulty, Game.time.timeElapsed());
+        int newHighScoreIndex = Game.highScores.checkHighScore(Game.difficulty, Game.time.timeElapsed());
         Game.infoWindow.stopTimeUpdates();
-        JFrame highscoreFrame = Game.highscores.highscoresWindow(Game.difficulty, newHighscoreIndex);
+        JFrame highScoreFrame = Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
         int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
-          highscoreFrame.dispose();
+          highScoreFrame.dispose();
           new Game(Game.difficulty);
         } else if (selection == JOptionPane.NO_OPTION) {
           Game.closeGame();

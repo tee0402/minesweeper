@@ -1,6 +1,6 @@
 class Game {
 	static String difficulty;
-  static Highscores highscores;
+  static HighScores highScores;
 	private static GameFrame gameFrame;
   static Time time;
 	static InfoWindow infoWindow;
@@ -21,7 +21,7 @@ class Game {
 	}
 	
 	private void startGame(int rows, int columns, int mines) {
-    highscores = new Highscores();
+    highScores = new HighScores();
 		gameFrame = new GameFrame(rows, columns, mines);
     time = new Time();
 		infoWindow = new InfoWindow(mines, time);
