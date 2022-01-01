@@ -3,20 +3,18 @@ import java.awt.event.*;
 import javax.swing.*;
 
 class GameFrame extends JFrame {
-	GameFrame(int rows, int columns, int mines) {
-		add(new GridPanel(rows, columns, mines));
+  InfoPanel infoPanel;
 
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    setBounds(screenSize.width / 3, screenSize.height / 4, rows * 30, columns * 30);
+	GameFrame(int rows, int columns, int mines) {
+    super("Minesweeper");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
-		setTitle("Minesweeper");
 		
 		JMenu gameMenu = new JMenu("Game");
 		gameMenu.add(new AbstractAction("New Game") {
 				public void actionPerformed(ActionEvent event) {
 					Game.closeGame();
-					new Game(Game.difficulty);
+					Game.startGame(Game.difficulty);
 				}
 			});
 		gameMenu.add(new AbstractAction("High Scores") {
@@ -29,19 +27,19 @@ class GameFrame extends JFrame {
     changeDifficulty.add(new AbstractAction("Easy") {
         public void actionPerformed(ActionEvent e) {
           Game.closeGame();
-          new Game("easy");
+          Game.startGame("easy");
         }
       });
     changeDifficulty.add(new AbstractAction("Medium") {
         public void actionPerformed(ActionEvent event) {
           Game.closeGame();
-          new Game("medium");
+          Game.startGame("medium");
         }
       });
     changeDifficulty.add(new AbstractAction("Hard") {
         public void actionPerformed(ActionEvent event) {
           Game.closeGame();
-          new Game("hard");
+          Game.startGame("hard");
         }
       });
 		gameMenu.add(changeDifficulty);
@@ -51,7 +49,6 @@ class GameFrame extends JFrame {
 					System.exit(0);
 				}
 			});
-		
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(new AbstractAction("Instructions") {
 				public void actionPerformed(ActionEvent e) {
@@ -62,11 +59,17 @@ class GameFrame extends JFrame {
 					JOptionPane.showMessageDialog(getParent(), message, "About Minesweeper", JOptionPane.INFORMATION_MESSAGE);
 				}
 			});
-		
 		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
 		menuBar.add(gameMenu);
 		menuBar.add(helpMenu);
+    setJMenuBar(menuBar);
+
+    add(new GridPanel(rows, columns, mines), BorderLayout.PAGE_END);
+    add(infoPanel = new InfoPanel(mines), BorderLayout.PAGE_START);
+
+    pack();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
 
     setVisible(true);
 	}

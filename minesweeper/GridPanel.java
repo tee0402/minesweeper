@@ -13,7 +13,7 @@ class GridPanel extends JPanel {
   private static Grid grid;
 	private static JPanel[][] gridPanel;
   private ImageIcon flagImage;
-	private final ImageIcon tileImage = new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/tile.jpg")));
+  private ImageIcon mineImage;
 
 	GridPanel(int rows, int columns, int mines) {
 		this.rows = rows;
@@ -25,9 +25,11 @@ class GridPanel extends JPanel {
 
     try {
       BufferedImage flag = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/flag.gif")));
-      flagImage = new ImageIcon(flag.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
+      flagImage = new ImageIcon(flag.getScaledInstance(30, 25, Image.SCALE_SMOOTH));
+      BufferedImage mine = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/mine.gif")));
+      mineImage = new ImageIcon(mine.getScaledInstance(30, 25, Image.SCALE_SMOOTH));
     } catch (IOException e) {
-      System.out.println("Error reading flag.gif.");
+      System.out.println("Error scaling images");
     }
 
 		setLayout(new GridLayout(rows, columns));
@@ -37,7 +39,8 @@ class GridPanel extends JPanel {
         gridPanel[i][j].setLayout(new BorderLayout());
 				add(gridPanel[i][j]);
 				JButton button = new JButton();
-				button.setIcon(tileImage);
+        button.setPreferredSize(new Dimension(30, 25));
+				button.setBackground(Color.white);
         gridPanel[i][j].add(button);
         // Add left click handler
 				button.addActionListener(new ButtonHandler(i, j));
@@ -45,14 +48,14 @@ class GridPanel extends JPanel {
 				button.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
-							if (button.getIcon().equals(tileImage) && flagsLeft > 0) {
+							if (button.getIcon() == null && flagsLeft > 0) {
 								button.setIcon(flagImage);
                 flagsLeft--;
-							} else if (button.getIcon().equals(flagImage)) {
-								button.setIcon(tileImage);
+							} else if (button.getIcon() != null) {
+                button.setIcon(null);
                 flagsLeft++;
 							}
-							Game.infoWindow.setFlagsLeftTextField(flagsLeft);
+							Game.gameFrame.infoPanel.setFlagsLeftTextField(flagsLeft);
 						}
 					}
 				});
@@ -75,7 +78,7 @@ class GridPanel extends JPanel {
       for (int j = 0; j < columns; j++) {
         if (grid.getData(i, j) == -1) {
           JButton button = (JButton) gridPanel[i][j].getComponent(0);
-          button.setIcon(new ImageIcon(Objects.requireNonNull(GridPanel.class.getResource("resources/mine.gif"))));
+          button.setIcon(mineImage);
         }
       }
     }
@@ -95,11 +98,11 @@ class GridPanel extends JPanel {
       if (grid.getData(row, column) == -1) {
         showAllMines();
         // Show game over prompt
-        Game.infoWindow.stopTimeUpdates();
+        Game.gameFrame.infoPanel.stopTimeUpdates();
         int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
-          new Game(Game.difficulty);
+          Game.startGame(Game.difficulty);
         } else if (selection == JOptionPane.NO_OPTION) {
           System.exit(0);
         }
@@ -112,13 +115,13 @@ class GridPanel extends JPanel {
       if (cellsLeft <= mines) {
         showAllMines();
         int newHighScoreIndex = Game.highScores.checkHighScore(Game.difficulty, Game.time.timeElapsed());
-        Game.infoWindow.stopTimeUpdates();
-        JFrame highScoreFrame = Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
+        Game.gameFrame.infoPanel.stopTimeUpdates();
+        Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
         int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
         if (selection == JOptionPane.YES_OPTION) {
           Game.closeGame();
-          highScoreFrame.dispose();
-          new Game(Game.difficulty);
+          Game.highScores.closeHighScoresWindow();
+          Game.startGame(Game.difficulty);
         } else if (selection == JOptionPane.NO_OPTION) {
           Game.closeGame();
         }

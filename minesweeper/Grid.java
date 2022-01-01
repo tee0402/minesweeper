@@ -8,9 +8,9 @@ class Grid {
   Grid(int rows, int columns, int mines) {
 		this.rows = rows;
 		this.columns = columns;
-    grid = new Cell[rows][columns];
 
     // Set up grid of cells
+    grid = new Cell[rows][columns];
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				grid[i][j] = new Cell();
@@ -22,20 +22,20 @@ class Grid {
 		Random random = new Random();
 		int minesPlaced = 0;
 		while (minesPlaced < mines) {
-			int mineX = random.nextInt(rows);
-			int mineY = random.nextInt(columns);
+			int x = random.nextInt(rows);
+			int y = random.nextInt(columns);
       // If the cell at the new random coordinates is not already a mine, place a mine there and increment adjacent cells
-			if (grid[mineX][mineY].getData() != -1) {
-        grid[mineX][mineY].setData(-1);
+			if (grid[x][y].getData() != -1) {
+        grid[x][y].setData(-1);
 				minesPlaced++;
-        incrementCell(getCell(mineX - 1, mineY));
-        incrementCell(getCell(mineX - 1, mineY + 1));
-        incrementCell(getCell(mineX, mineY + 1));
-        incrementCell(getCell(mineX + 1, mineY + 1));
-        incrementCell(getCell(mineX + 1, mineY));
-        incrementCell(getCell(mineX + 1, mineY - 1));
-        incrementCell(getCell(mineX, mineY - 1));
-        incrementCell(getCell(mineX - 1, mineY - 1));
+        incrementCell(getCell(x - 1, y));
+        incrementCell(getCell(x - 1, y + 1));
+        incrementCell(getCell(x, y + 1));
+        incrementCell(getCell(x + 1, y + 1));
+        incrementCell(getCell(x + 1, y));
+        incrementCell(getCell(x + 1, y - 1));
+        incrementCell(getCell(x, y - 1));
+        incrementCell(getCell(x - 1, y - 1));
 			}
 		}
 	}

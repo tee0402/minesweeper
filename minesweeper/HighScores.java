@@ -7,6 +7,7 @@ class HighScores {
 	private final ArrayList<Integer> easyScores;
 	private final ArrayList<Integer> mediumScores;
 	private final ArrayList<Integer> hardScores;
+  private JFrame frame;
 
   HighScores() {
 		easyScores = new ArrayList<>();
@@ -84,10 +85,8 @@ class HighScores {
     }
   }
 	
-	JFrame highScoresWindow(String difficulty, int newHighScoreIndex) {
-		JFrame frame = new JFrame("High Scores");
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    frame.setBounds(2 * screenSize.width / 5, screenSize.height / 4, 400, 500);
+	void highScoresWindow(String difficulty, int newHighScoreIndex) {
+		frame = new JFrame("High Scores");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
@@ -110,21 +109,28 @@ class HighScores {
       addScoreLabel(panel, false, hardScores, i, newHighScoreIndex, difficulty.equals("hard"));
 		}
 
+    frame.pack();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    frame.setLocation(screenSize.width / 2 - frame.getWidth() / 2, screenSize.height / 2 - frame.getHeight() / 2);
+
     frame.setVisible(true);
-    return frame;
 	}
 
   private void addScoreLabel(JPanel panel, boolean writeNumber, ArrayList<Integer> scores, int i, int newHighScoreIndex, boolean highlight) {
     JLabel scoreLabel;
     if (i < scores.size()) {
-      scoreLabel = writeNumber ? new JLabel((i + 1) + ".       " + scores.get(i)) : new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
+      scoreLabel = writeNumber ? new JLabel((i + 1) + (i == 9 ? ".     " : ".       ") + scores.get(i)) : new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
       if (highlight && i == newHighScoreIndex) {
         scoreLabel.setForeground(Color.red);
       }
     } else {
-      scoreLabel = writeNumber ? new JLabel((i + 1) + ".       ") : new JLabel();
+      scoreLabel = writeNumber ? new JLabel((i + 1) + (i == 9 ? ".     " : ".       ")) : new JLabel();
     }
     scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
     panel.add(scoreLabel);
+  }
+
+  void closeHighScoresWindow() {
+    frame.dispose();
   }
 }

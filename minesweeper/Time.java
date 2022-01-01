@@ -1,12 +1,11 @@
 class Time {
-	private final long startTime;
+	private long startTime;
 	
-	Time() {
-		startTime = System.currentTimeMillis();
-	}
+	void reset() {
+    startTime = System.currentTimeMillis();
+  }
 	
 	int timeElapsed() {
-		long endTime = System.currentTimeMillis();
-		return (int) ((endTime - startTime) / 1000);
+		return (int) ((System.currentTimeMillis() - startTime) / 1000);
 	}
 }
