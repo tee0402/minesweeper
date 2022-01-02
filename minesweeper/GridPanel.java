@@ -38,14 +38,50 @@ class GridPanel extends JPanel {
         gridPanel[i][j] = new JPanel();
         gridPanel[i][j].setLayout(new BorderLayout());
 				add(gridPanel[i][j]);
+
 				JButton button = new JButton();
         button.setPreferredSize(new Dimension(30, 25));
 				button.setBackground(Color.white);
-        gridPanel[i][j].add(button);
         // Add left click handler
-				button.addActionListener(new ButtonHandler(i, j));
+        final int row = i;
+        final int column = j;
+				button.addActionListener(e -> {
+          // Clicked mine
+          if (grid.getData(row, column) == -1) {
+            showAllMines();
+            // Show game over prompt
+            Game.gameFrame.infoPanel.stopTimeUpdates();
+            int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
+            if (selection == JOptionPane.YES_OPTION) {
+              Game.closeGame();
+              Game.startGame(Game.difficulty);
+            } else if (selection == JOptionPane.NO_OPTION) {
+              System.exit(0);
+            }
+          }
+          // Clicked empty or number cell
+          else {
+            grid.revealCellAndSurrounding(row, column);
+          }
+          // When all cells have been revealed
+          if (cellsLeft <= this.mines) {
+            showAllMines();
+            int newHighScoreIndex = Game.highScores.checkHighScore(Game.difficulty, Game.time.timeElapsed());
+            Game.gameFrame.infoPanel.stopTimeUpdates();
+            Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
+            int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
+            if (selection == JOptionPane.YES_OPTION) {
+              Game.closeGame();
+              Game.highScores.closeHighScoresWindow();
+              Game.startGame(Game.difficulty);
+            } else if (selection == JOptionPane.NO_OPTION) {
+              Game.closeGame();
+            }
+          }
+        });
         // Add right click handler
 				button.addMouseListener(new MouseAdapter() {
+          @Override
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
 							if (button.getIcon() == null && flagsLeft > 0) {
@@ -59,6 +95,7 @@ class GridPanel extends JPanel {
 						}
 					}
 				});
+        gridPanel[i][j].add(button);
 			}
 		}
 	}
@@ -83,49 +120,4 @@ class GridPanel extends JPanel {
       }
     }
   }
-	
-	private class ButtonHandler implements ActionListener {
-    private final int row, column;
-
-    ButtonHandler(int x, int y) {
-      row = x;
-      column = y;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      // Clicked mine
-      if (grid.getData(row, column) == -1) {
-        showAllMines();
-        // Show game over prompt
-        Game.gameFrame.infoPanel.stopTimeUpdates();
-        int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
-        if (selection == JOptionPane.YES_OPTION) {
-          Game.closeGame();
-          Game.startGame(Game.difficulty);
-        } else if (selection == JOptionPane.NO_OPTION) {
-          System.exit(0);
-        }
-      }
-      // Clicked empty or number cell
-      else {
-        grid.revealCellAndSurrounding(row, column);
-      }
-
-      if (cellsLeft <= mines) {
-        showAllMines();
-        int newHighScoreIndex = Game.highScores.checkHighScore(Game.difficulty, Game.time.timeElapsed());
-        Game.gameFrame.infoPanel.stopTimeUpdates();
-        Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
-        int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
-        if (selection == JOptionPane.YES_OPTION) {
-          Game.closeGame();
-          Game.highScores.closeHighScoresWindow();
-          Game.startGame(Game.difficulty);
-        } else if (selection == JOptionPane.NO_OPTION) {
-          Game.closeGame();
-        }
-      }
-    }
-	}
 }

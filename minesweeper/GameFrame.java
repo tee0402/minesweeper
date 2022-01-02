@@ -12,53 +12,58 @@ class GameFrame extends JFrame {
 		
 		JMenu gameMenu = new JMenu("Game");
 		gameMenu.add(new AbstractAction("New Game") {
-				public void actionPerformed(ActionEvent event) {
-					Game.closeGame();
-					Game.startGame(Game.difficulty);
-				}
-			});
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Game.closeGame();
+        Game.startGame(Game.difficulty);
+      }
+    });
 		gameMenu.add(new AbstractAction("High Scores") {
-        public void actionPerformed(ActionEvent event)
-        {
-          Game.highScores.highScoresWindow(Game.difficulty, -1);
-        }
-      });
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Game.highScores.highScoresWindow(Game.difficulty, -1);
+      }
+    });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
     changeDifficulty.add(new AbstractAction("Easy") {
-        public void actionPerformed(ActionEvent e) {
-          Game.closeGame();
-          Game.startGame("easy");
-        }
-      });
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Game.closeGame();
+        Game.startGame("easy");
+      }
+    });
     changeDifficulty.add(new AbstractAction("Medium") {
-        public void actionPerformed(ActionEvent event) {
-          Game.closeGame();
-          Game.startGame("medium");
-        }
-      });
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Game.closeGame();
+        Game.startGame("medium");
+      }
+    });
     changeDifficulty.add(new AbstractAction("Hard") {
-        public void actionPerformed(ActionEvent event) {
-          Game.closeGame();
-          Game.startGame("hard");
-        }
-      });
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        Game.closeGame();
+        Game.startGame("hard");
+      }
+    });
 		gameMenu.add(changeDifficulty);
 		gameMenu.add(new AbstractAction("Exit") {
-				public void actionPerformed(ActionEvent event)
-				{
-					System.exit(0);
-				}
-			});
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        System.exit(0);
+      }
+    });
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(new AbstractAction("Instructions") {
-				public void actionPerformed(ActionEvent e) {
-					String message = "The objective of the game is to reveal all the squares in the grid without clicking on a mine.\r\n\r\n";
-          message += "Left click on a square to reveal its contents.\r\n";
-					message += "Right click on a square to flag it.\r\n\r\n";
-					message += "There are three pre-defined maps to play: easy, medium, and hard.\r\n";
-					JOptionPane.showMessageDialog(getParent(), message, "About Minesweeper", JOptionPane.INFORMATION_MESSAGE);
-				}
-			});
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String message = "The objective of the game is to reveal all the squares in the grid without clicking on a mine.\r\n\r\n";
+        message += "Left click on a square to reveal its contents.\r\n";
+        message += "Right click on a square to flag it.\r\n\r\n";
+        message += "There are three pre-defined maps to play: easy, medium, and hard.\r\n";
+        JOptionPane.showMessageDialog(getParent(), message, "About Minesweeper", JOptionPane.INFORMATION_MESSAGE);
+      }
+    });
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(gameMenu);
 		menuBar.add(helpMenu);
