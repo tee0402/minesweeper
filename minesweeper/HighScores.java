@@ -4,15 +4,12 @@ import java.io.*;
 import javax.swing.*;
 
 class HighScores {
-	private final ArrayList<Integer> easyScores;
-	private final ArrayList<Integer> mediumScores;
-	private final ArrayList<Integer> hardScores;
+	private final ArrayList<Integer> easyScores = new ArrayList<>();
+	private final ArrayList<Integer> mediumScores = new ArrayList<>();
+	private final ArrayList<Integer> hardScores = new ArrayList<>();
   private JFrame frame;
 
   HighScores() {
-		easyScores = new ArrayList<>();
-		mediumScores = new ArrayList<>();
-		hardScores = new ArrayList<>();
     readHighScores("easy_scores.txt", easyScores);
     readHighScores("medium_scores.txt", mediumScores);
     readHighScores("hard_scores.txt", hardScores);

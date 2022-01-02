@@ -2,26 +2,24 @@ import java.awt.*;
 import javax.swing.*;
 
 class InfoPanel extends JPanel {
-  private final JTextField flagsLeftTextField, timeElapsedTextField;
-  private final Timer timer;
+  private final JTextField flagsLeftTextField = new JTextField();
+  private final JTextField timeElapsedTextField = new JTextField();
+  private final Timer timer = new Timer(100, e -> setTimeElapsedTextField());
 
   InfoPanel(int flagsLeft) {
     setLayout(new GridLayout(1, 2));
 
-    timeElapsedTextField = new JTextField();
     Game.time.reset();
     setTimeElapsedTextField();
     timeElapsedTextField.setEditable(false);
     timeElapsedTextField.setFont(new Font("Verdana", Font.BOLD, 13));
     add(timeElapsedTextField);
 
-    flagsLeftTextField = new JTextField();
     setFlagsLeftTextField(flagsLeft);
     flagsLeftTextField.setEditable(false);
     flagsLeftTextField.setFont(new Font("Verdana", Font.BOLD, 13));
     add(flagsLeftTextField);
 
-		timer = new Timer(100, e -> setTimeElapsedTextField());
 		timer.start();
 	}
 
