@@ -85,26 +85,34 @@ class HighScores {
 	void highScoresWindow(String difficulty, int newHighScoreIndex) {
 		frame = new JFrame("High Scores");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(11, 4));
-		frame.add(panel);
 
+    JPanel numbersPanel = new JPanel();
+    numbersPanel.setLayout(new GridLayout(11, 1));
+    numbersPanel.add(new JLabel());
+    for (int i = 1; i <= 10; i++) {
+      JLabel numberLabel = new JLabel(i + ".");
+      numberLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+      numbersPanel.add(numberLabel);
+    }
+    frame.add(numbersPanel, BorderLayout.WEST);
+		
+		JPanel scoresPanel = new JPanel();
+    scoresPanel.setLayout(new GridLayout(11, 3));
 		JLabel easyLabel = new JLabel("Easy", SwingConstants.CENTER);
 		JLabel mediumLabel = new JLabel("Medium", SwingConstants.CENTER);
 		JLabel hardLabel = new JLabel("Hard", SwingConstants.CENTER);
     easyLabel.setFont(new Font("Verdana", Font.BOLD, 20));
     mediumLabel.setFont(new Font("Verdana", Font.BOLD, 20));
     hardLabel.setFont(new Font("Verdana", Font.BOLD, 20));
-		panel.add(easyLabel);
-		panel.add(mediumLabel);
-		panel.add(hardLabel);
-
+    scoresPanel.add(easyLabel);
+    scoresPanel.add(mediumLabel);
+    scoresPanel.add(hardLabel);
     for (int i = 0; i < 10; i++) {
-			addScoreLabel(panel, true, easyScores, i, newHighScoreIndex, difficulty.equals("easy"));
-      addScoreLabel(panel, false, mediumScores, i, newHighScoreIndex, difficulty.equals("medium"));
-      addScoreLabel(panel, false, hardScores, i, newHighScoreIndex, difficulty.equals("hard"));
+			scoresPanel.add(createScoreLabel(easyScores, i, newHighScoreIndex, difficulty.equals("easy")));
+      scoresPanel.add(createScoreLabel(mediumScores, i, newHighScoreIndex, difficulty.equals("medium")));
+      scoresPanel.add(createScoreLabel(hardScores, i, newHighScoreIndex, difficulty.equals("hard")));
 		}
+    frame.add(scoresPanel, BorderLayout.EAST);
 
     frame.pack();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -113,18 +121,17 @@ class HighScores {
     frame.setVisible(true);
 	}
 
-  private void addScoreLabel(JPanel panel, boolean writeNumber, ArrayList<Integer> scores, int i, int newHighScoreIndex, boolean highlight) {
-    JLabel scoreLabel;
+  private JLabel createScoreLabel(ArrayList<Integer> scores, int i, int newHighScoreIndex, boolean currentDifficulty) {
     if (i < scores.size()) {
-      scoreLabel = writeNumber ? new JLabel((i + 1) + (i == 9 ? ".     " : ".       ") + scores.get(i)) : new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
-      if (highlight && i == newHighScoreIndex) {
+      JLabel scoreLabel = new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
+      if (currentDifficulty && i == newHighScoreIndex) {
         scoreLabel.setForeground(Color.red);
       }
+      scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+      return scoreLabel;
     } else {
-      scoreLabel = writeNumber ? new JLabel((i + 1) + (i == 9 ? ".     " : ".       ")) : new JLabel();
+      return new JLabel();
     }
-    scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-    panel.add(scoreLabel);
   }
 
   void closeHighScoresWindow() {
