@@ -5,7 +5,7 @@ import javax.swing.*;
 class GameFrame extends JFrame {
   InfoPanel infoPanel;
 
-	GameFrame(int rows, int columns, int mines) {
+	GameFrame(int rows, int columns, int mines, String difficulty) {
     super("Minesweeper");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
@@ -14,38 +14,40 @@ class GameFrame extends JFrame {
 		gameMenu.add(new AbstractAction("New Game") {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Game.closeGame();
-        Game.startGame(Game.difficulty);
+        Game.startGame(difficulty);
       }
     });
 		gameMenu.add(new AbstractAction("High Scores") {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Game.highScores.highScoresWindow(Game.difficulty, -1);
+        Game.highScores.highScoresWindow(difficulty, -1);
       }
     });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
-    changeDifficulty.add(new AbstractAction("Easy") {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Game.closeGame();
-        Game.startGame("easy");
-      }
-    });
-    changeDifficulty.add(new AbstractAction("Medium") {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Game.closeGame();
-        Game.startGame("medium");
-      }
-    });
-    changeDifficulty.add(new AbstractAction("Hard") {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Game.closeGame();
-        Game.startGame("hard");
-      }
-    });
+    if (!difficulty.equals("easy")) {
+      changeDifficulty.add(new AbstractAction("Easy") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          Game.startGame("easy");
+        }
+      });
+    }
+    if (!difficulty.equals("medium")) {
+      changeDifficulty.add(new AbstractAction("Medium") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          Game.startGame("medium");
+        }
+      });
+    }
+    if (!difficulty.equals("hard")) {
+      changeDifficulty.add(new AbstractAction("Hard") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          Game.startGame("hard");
+        }
+      });
+    }
 		gameMenu.add(changeDifficulty);
 		gameMenu.add(new AbstractAction("Exit") {
       @Override
@@ -69,7 +71,7 @@ class GameFrame extends JFrame {
 		menuBar.add(helpMenu);
     setJMenuBar(menuBar);
 
-    add(new GridPanel(rows, columns, mines), BorderLayout.PAGE_END);
+    add(new GridPanel(rows, columns, mines, difficulty), BorderLayout.PAGE_END);
     add(infoPanel = new InfoPanel(mines), BorderLayout.PAGE_START);
 
     pack();

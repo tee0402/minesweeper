@@ -83,6 +83,7 @@ class HighScores {
   }
 	
 	void highScoresWindow(String difficulty, int newHighScoreIndex) {
+    closeHighScoresWindow();
 		frame = new JFrame("High Scores");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -114,12 +115,33 @@ class HighScores {
 		}
     frame.add(scoresPanel, BorderLayout.EAST);
 
+    if (newHighScoreIndex != -1) {
+      JPanel playAgainPanel = new JPanel();
+      playAgainPanel.setLayout(new GridLayout(1, 2));
+      JButton playAgainButton = new JButton("Play again");
+      playAgainButton.addActionListener(e -> {
+        closeHighScoresWindow();
+        Game.startGame(difficulty);
+      });
+      playAgainPanel.add(playAgainButton);
+      JButton exitButton = new JButton("Exit");
+      exitButton.addActionListener(e -> System.exit(0));
+      playAgainPanel.add(exitButton);
+      frame.add(playAgainPanel, BorderLayout.SOUTH);
+    }
+
     frame.pack();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     frame.setLocation(screenSize.width / 2 - frame.getWidth() / 2, screenSize.height / 2 - frame.getHeight() / 2);
 
     frame.setVisible(true);
 	}
+
+  private void closeHighScoresWindow() {
+    if (frame != null) {
+      frame.dispose();
+    }
+  }
 
   private JLabel createScoreLabel(ArrayList<Integer> scores, int i, int newHighScoreIndex, boolean currentDifficulty) {
     if (i < scores.size()) {
@@ -132,9 +154,5 @@ class HighScores {
     } else {
       return new JLabel();
     }
-  }
-
-  void closeHighScoresWindow() {
-    frame.dispose();
   }
 }

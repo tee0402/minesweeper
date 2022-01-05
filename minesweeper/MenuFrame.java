@@ -13,37 +13,35 @@ class MenuFrame extends JFrame {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
     panel.setBackground(Color.lightGray);
-    add(panel);
-
     JLabel label = new JLabel("Minesweeper");
     label.setFont(new Font("Verdana", Font.BOLD, 50));
     label.setAlignmentX(JPanel.CENTER_ALIGNMENT);
     panel.add(label);
-
-    JButton easy = new JButton("Easy");
-    JButton medium = new JButton("Medium");
-    JButton hard = new JButton("Hard");
-    easy.addActionListener(e -> {
+    JButton easyButton = new JButton("Easy");
+    JButton mediumButton = new JButton("Medium");
+    JButton hardButton = new JButton("Hard");
+    easyButton.addActionListener(e -> {
       dispose();
       Game.startGame("easy");
     });
-    medium.addActionListener(e -> {
+    mediumButton.addActionListener(e -> {
       dispose();
       Game.startGame("medium");
     });
-    hard.addActionListener(e -> {
+    hardButton.addActionListener(e -> {
       dispose();
       Game.startGame("hard");
     });
-    easy.setMaximumSize(new Dimension(width / 2, height / 5));
-    medium.setMaximumSize(new Dimension(width / 2, height / 5));
-    hard.setMaximumSize(new Dimension(width / 2, height / 5));
-    easy.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-    medium.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-    hard.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-    panel.add(easy);
-    panel.add(medium);
-    panel.add(hard);
+    easyButton.setMaximumSize(new Dimension(width / 2, height / 5));
+    mediumButton.setMaximumSize(new Dimension(width / 2, height / 5));
+    hardButton.setMaximumSize(new Dimension(width / 2, height / 5));
+    easyButton.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+    mediumButton.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+    hardButton.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+    panel.add(easyButton);
+    panel.add(mediumButton);
+    panel.add(hardButton);
+    add(panel);
 
     setVisible(true);
   }

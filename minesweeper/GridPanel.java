@@ -15,7 +15,7 @@ class GridPanel extends JPanel {
   private ImageIcon flagImage;
   private ImageIcon mineImage;
 
-	GridPanel(int rows, int columns, int mines) {
+	GridPanel(int rows, int columns, int mines, String difficulty) {
 		this.rows = rows;
     this.columns = columns;
 		this.mines = flagsLeft = mines;
@@ -39,22 +39,21 @@ class GridPanel extends JPanel {
         gridPanel[i][j].setLayout(new BorderLayout());
 				add(gridPanel[i][j]);
 
-				JButton button = new JButton();
-        button.setPreferredSize(new Dimension(30, 25));
-				button.setBackground(Color.white);
+				JButton cellButton = new JButton();
+        cellButton.setPreferredSize(new Dimension(30, 25));
+        cellButton.setBackground(Color.white);
         // Add left click handler
         final int row = i;
         final int column = j;
-				button.addActionListener(e -> {
+        cellButton.addActionListener(e -> {
           // Clicked mine
           if (grid.getData(row, column) == -1) {
+            Game.gameFrame.infoPanel.stopTimeUpdates();
             showAllMines();
             // Show game over prompt
-            Game.gameFrame.infoPanel.stopTimeUpdates();
             int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
             if (selection == JOptionPane.YES_OPTION) {
-              Game.closeGame();
-              Game.startGame(Game.difficulty);
+              Game.startGame(difficulty);
             } else if (selection == JOptionPane.NO_OPTION) {
               System.exit(0);
             }
@@ -65,37 +64,40 @@ class GridPanel extends JPanel {
           }
           // When all cells have been revealed
           if (cellsLeft <= this.mines) {
-            showAllMines();
-            int newHighScoreIndex = Game.highScores.checkHighScore(Game.difficulty, Game.time.timeElapsed());
+            int score = Game.time.timeElapsed();
             Game.gameFrame.infoPanel.stopTimeUpdates();
-            Game.highScores.highScoresWindow(Game.difficulty, newHighScoreIndex);
-            int selection = JOptionPane.showConfirmDialog(null, "You win! Play again?");
-            if (selection == JOptionPane.YES_OPTION) {
-              Game.closeGame();
-              Game.highScores.closeHighScoresWindow();
-              Game.startGame(Game.difficulty);
-            } else if (selection == JOptionPane.NO_OPTION) {
-              Game.closeGame();
+            showAllMines();
+            int newHighScoreIndex = Game.highScores.checkHighScore(difficulty, score);
+            // Show game over prompt if no new high score or high scores window if new high score
+            if (newHighScoreIndex == -1) {
+              int selection = JOptionPane.showConfirmDialog(null, "You won with a score of " + score + "! Play again?");
+              if (selection == JOptionPane.YES_OPTION) {
+                Game.startGame(difficulty);
+              } else if (selection == JOptionPane.NO_OPTION) {
+                System.exit(0);
+              }
+            } else {
+              Game.highScores.highScoresWindow(difficulty, newHighScoreIndex);
             }
           }
         });
         // Add right click handler
-				button.addMouseListener(new MouseAdapter() {
+        cellButton.addMouseListener(new MouseAdapter() {
           @Override
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
-							if (button.getIcon() == null && flagsLeft > 0) {
-								button.setIcon(flagImage);
+							if (cellButton.getIcon() == null && flagsLeft > 0) {
+                cellButton.setIcon(flagImage);
                 flagsLeft--;
-							} else if (button.getIcon() != null) {
-                button.setIcon(null);
+							} else if (cellButton.getIcon() != null) {
+                cellButton.setIcon(null);
                 flagsLeft++;
 							}
 							Game.gameFrame.infoPanel.setFlagsLeftTextField(flagsLeft);
 						}
 					}
 				});
-        gridPanel[i][j].add(button);
+        gridPanel[i][j].add(cellButton);
 			}
 		}
 	}

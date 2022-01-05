@@ -1,25 +1,26 @@
 class Game {
-	static String difficulty;
   static HighScores highScores = new HighScores();
   static Time time = new Time();
   static GameFrame gameFrame;
 
-  static void startGame(String newDifficulty) {
-    difficulty = newDifficulty;
+  static void startGame(String difficulty) {
+    closeGame();
     switch (difficulty) {
       case "easy":
-        gameFrame = new GameFrame(10, 10, 10);
+        gameFrame = new GameFrame(10, 10, 10, difficulty);
         break;
       case "medium":
-        gameFrame = new GameFrame(15, 15, 40);
+        gameFrame = new GameFrame(15, 15, 40, difficulty);
         break;
       case "hard":
-        gameFrame = new GameFrame(22, 22, 99);
+        gameFrame = new GameFrame(22, 22, 99, difficulty);
         break;
     }
   }
 	
-	static void closeGame() {
-		gameFrame.dispose();
+	private static void closeGame() {
+    if (gameFrame != null) {
+      gameFrame.dispose();
+    }
 	}
 }
