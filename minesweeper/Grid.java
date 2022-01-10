@@ -9,12 +9,11 @@ class Grid {
 		this.rows = rows;
 		this.columns = columns;
 
-    // Set up grid of cells
+    // Set up grid of empty cells
     grid = new Cell[rows][columns];
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				grid[i][j] = new Cell();
-				grid[i][j].setData(0);
 			}
 		}
 
@@ -66,19 +65,15 @@ class Grid {
       cell.setRevealed();
       GridPanel.revealInGUI(row, column);
       if (cell.getData() == 0) {
-        revealSurrounding(row, column);
+        revealCellAndSurrounding(row - 1, column);
+        revealCellAndSurrounding(row - 1, column + 1);
+        revealCellAndSurrounding(row, column + 1);
+        revealCellAndSurrounding(row + 1, column + 1);
+        revealCellAndSurrounding(row + 1, column);
+        revealCellAndSurrounding(row + 1, column - 1);
+        revealCellAndSurrounding(row, column - 1);
+        revealCellAndSurrounding(row - 1, column - 1);
       }
     }
-  }
-
-  private void revealSurrounding(int row, int column) {
-    revealCellAndSurrounding(row - 1, column);
-    revealCellAndSurrounding(row - 1, column + 1);
-    revealCellAndSurrounding(row, column + 1);
-    revealCellAndSurrounding(row + 1, column + 1);
-    revealCellAndSurrounding(row + 1, column);
-    revealCellAndSurrounding(row + 1, column - 1);
-    revealCellAndSurrounding(row, column - 1);
-    revealCellAndSurrounding(row - 1, column - 1);
   }
 }

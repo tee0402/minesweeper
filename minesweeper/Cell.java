@@ -1,10 +1,10 @@
 class Cell {
-	private int data;
+	private int data = 0;
 	private boolean revealed = false;
-	
-	int getData() {
-		return data;
-	}
+
+  int getData() {
+    return data;
+  }
 	void setData(int data) {
 		this.data = data;
 	}
