@@ -67,7 +67,7 @@ class GridPanel extends JPanel {
             int score = Game.time.timeElapsed();
             Game.gameFrame.infoPanel.stopTimeUpdates();
             showAllMines();
-            int newHighScoreIndex = Game.highScores.checkHighScore(difficulty, score);
+            int newHighScoreIndex = Game.highScores.addHighScore(difficulty, score);
             // Show game over prompt if no new high score or high scores window if new high score
             if (newHighScoreIndex == -1) {
               int selection = JOptionPane.showConfirmDialog(null, "You won with a score of " + score + "! Play again?");

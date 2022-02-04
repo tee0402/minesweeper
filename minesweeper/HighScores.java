@@ -4,82 +4,21 @@ import java.io.*;
 import javax.swing.*;
 
 class HighScores {
-	private final ArrayList<Integer> easyScores = new ArrayList<>();
-	private final ArrayList<Integer> mediumScores = new ArrayList<>();
-	private final ArrayList<Integer> hardScores = new ArrayList<>();
+	private final Scores easyScores = new Scores("easy_scores.txt");
+	private final Scores mediumScores = new Scores("medium_scores.txt");
+	private final Scores hardScores = new Scores("hard_scores.txt");
   private JFrame frame;
 
-  HighScores() {
-    readHighScores("easy_scores.txt", easyScores);
-    readHighScores("medium_scores.txt", mediumScores);
-    readHighScores("hard_scores.txt", hardScores);
-  }
-
-  private void readHighScores(String fileName, ArrayList<Integer> scores) {
-    File file = new File(fileName);
-    try {
-      if (file.exists() || file.createNewFile()) {
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextInt()) {
-          scores.add(scanner.nextInt());
-        }
-        scanner.close();
-      }
-    } catch (IOException e) {
-      System.out.println("Error scanning high scores file");
-    }
-  }
-
-  int checkHighScore(String difficulty, int score) {
-    int newHighScoreIndex = -1;
-    int numEasyScores = easyScores.size();
-    int numMediumScores = mediumScores.size();
-    int numHardScores = hardScores.size();
-    if (difficulty.equals("easy") && (numEasyScores < 10 || score < easyScores.get(numEasyScores - 1))) {
-      newHighScoreIndex = addHighScore(score, easyScores);
-      writeHighScores(easyScores, "easy_scores.txt");
-    } else if (difficulty.equals("medium") && (numMediumScores < 10 || score < mediumScores.get(numMediumScores - 1))) {
-      newHighScoreIndex = addHighScore(score, mediumScores);
-      writeHighScores(mediumScores, "medium_scores.txt");
-    } else if (difficulty.equals("hard") && (numHardScores < 10 || score < hardScores.get(numHardScores - 1))) {
-      newHighScoreIndex = addHighScore(score, hardScores);
-      writeHighScores(hardScores, "hard_scores.txt");
-    }
-    return newHighScoreIndex;
-  }
-
-  private int addHighScore(int score, ArrayList<Integer> highScores) {
-    int numHighScores = highScores.size();
-    if (numHighScores == 0) {
-      highScores.add(score);
-      return 0;
-    } else if (numHighScores < 10 && score >= highScores.get(numHighScores - 1)) {
-      highScores.add(score);
-      return highScores.size() - 1;
-    } else {
-      for (int i = 0; i < numHighScores; i++) {
-        if (score < highScores.get(i)) {
-          highScores.add(i, score);
-          if (highScores.size() == 11) {
-            highScores.remove(10);
-          }
-          return i;
-        }
-      }
+  int addHighScore(String difficulty, int score) {
+    switch (difficulty) {
+      case "easy":
+        return easyScores.add(score);
+      case "medium":
+        return mediumScores.add(score);
+      case "hard":
+        return hardScores.add(score);
     }
     return -1;
-  }
-
-  private void writeHighScores(ArrayList<Integer> highScores, String fileName) {
-    try {
-      FileWriter fileWriter = new FileWriter(fileName);
-      for (int highScore : highScores) {
-        fileWriter.write(highScore + " ");
-      }
-      fileWriter.close();
-    } catch (IOException e) {
-      System.out.println("Error writing high scores file");
-    }
   }
 	
 	void highScoresWindow(String difficulty, int newHighScoreIndex) {
@@ -108,10 +47,14 @@ class HighScores {
     scoresPanel.add(easyLabel);
     scoresPanel.add(mediumLabel);
     scoresPanel.add(hardLabel);
+    boolean easy = difficulty.equals("easy");
+    boolean medium = difficulty.equals("medium");
+    boolean hard = difficulty.equals("hard");
     for (int i = 0; i < 10; i++) {
-			scoresPanel.add(createScoreLabel(easyScores, i, newHighScoreIndex, difficulty.equals("easy")));
-      scoresPanel.add(createScoreLabel(mediumScores, i, newHighScoreIndex, difficulty.equals("medium")));
-      scoresPanel.add(createScoreLabel(hardScores, i, newHighScoreIndex, difficulty.equals("hard")));
+      boolean newHighScoreRow = i == newHighScoreIndex;
+			scoresPanel.add(easyScores.createScoreLabel(i, easy && newHighScoreRow));
+      scoresPanel.add(mediumScores.createScoreLabel(i, medium && newHighScoreRow));
+      scoresPanel.add(hardScores.createScoreLabel(i, hard && newHighScoreRow));
 		}
     frame.add(scoresPanel, BorderLayout.EAST);
 
@@ -143,16 +86,80 @@ class HighScores {
     }
   }
 
-  private JLabel createScoreLabel(ArrayList<Integer> scores, int i, int newHighScoreIndex, boolean currentDifficulty) {
-    if (i < scores.size()) {
-      JLabel scoreLabel = new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
-      if (currentDifficulty && i == newHighScoreIndex) {
-        scoreLabel.setForeground(Color.red);
+  private static class Scores {
+    private final ArrayList<Integer> scores = new ArrayList<>();
+    private final String fileName;
+
+    private Scores(String fileName) {
+      this.fileName = fileName;
+      read();
+    }
+
+    private void read() {
+      File file = new File(fileName);
+      try {
+        if (file.exists() || file.createNewFile()) {
+          Scanner scanner = new Scanner(file);
+          while (scanner.hasNextInt()) {
+            scores.add(scanner.nextInt());
+          }
+          scanner.close();
+        }
+      } catch (IOException e) {
+        System.out.println("Error scanning high scores file");
       }
-      scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-      return scoreLabel;
-    } else {
-      return new JLabel();
+    }
+
+    private int add(int score) {
+      int index = -1;
+      int numScores = scores.size();
+      if (numScores < 10 || score < scores.get(numScores - 1)) {
+        if (numScores == 0) {
+          scores.add(score);
+          index = 0;
+        } else if (numScores < 10 && score >= scores.get(numScores - 1)) {
+          scores.add(score);
+          index = scores.size() - 1;
+        } else {
+          for (int i = 0; i < numScores; i++) {
+            if (score < scores.get(i)) {
+              scores.add(i, score);
+              if (scores.size() == 11) {
+                scores.remove(10);
+              }
+              index = i;
+              break;
+            }
+          }
+        }
+        write();
+      }
+      return index;
+    }
+
+    private void write() {
+      try {
+        FileWriter fileWriter = new FileWriter(fileName);
+        for (int score : scores) {
+          fileWriter.write(score + " ");
+        }
+        fileWriter.close();
+      } catch (IOException e) {
+        System.out.println("Error writing high scores file");
+      }
+    }
+
+    private JLabel createScoreLabel(int i, boolean highlight) {
+      if (i < scores.size()) {
+        JLabel scoreLabel = new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
+        if (highlight) {
+          scoreLabel.setForeground(Color.red);
+        }
+        scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        return scoreLabel;
+      } else {
+        return new JLabel();
+      }
     }
   }
 }
