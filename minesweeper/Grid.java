@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Random;
 
 class Grid {
 	private final Cell[][] grid;

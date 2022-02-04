@@ -1,5 +1,5 @@
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 class InfoPanel extends JPanel {
   private final JTextField flagsLeftTextField = new JTextField();

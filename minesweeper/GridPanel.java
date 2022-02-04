@@ -1,10 +1,11 @@
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.Objects;
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.imageio.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 class GridPanel extends JPanel {
   private final int rows, columns, mines;

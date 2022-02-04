@@ -1,7 +1,10 @@
-import java.util.*;
-import java.awt.*;
-import java.io.*;
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 class HighScores {
 	private final Scores easyScores = new Scores("easy_scores.txt");
