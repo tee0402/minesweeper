@@ -2,8 +2,7 @@ import java.util.Random;
 
 class Grid {
 	private final Cell[][] grid;
-	private final int rows;
-  private final int columns;
+	private final int rows, columns;
 
   Grid(int rows, int columns, int mines) {
 		this.rows = rows;
@@ -52,6 +51,13 @@ class Grid {
     }
   }
 
+  boolean containsMine(int row, int column) {
+    if (row >= 0 && row < rows && column >= 0 && column < columns) {
+      return grid[row][column].getData() == -1;
+    }
+    return false;
+  }
+
   int getData(int row, int column) {
     if (row >= 0 && row < rows && column >= 0 && column < columns) {
       return grid[row][column].getData();
@@ -74,6 +80,25 @@ class Grid {
         revealCellAndSurrounding(row, column - 1);
         revealCellAndSurrounding(row - 1, column - 1);
       }
+    }
+  }
+
+  private static class Cell {
+    private int data = 0;
+    private boolean revealed = false;
+
+    private int getData() {
+      return data;
+    }
+    private void setData(int data) {
+      this.data = data;
+    }
+
+    private boolean getRevealed() {
+      return revealed;
+    }
+    private void setRevealed() {
+      revealed = true;
     }
   }
 }

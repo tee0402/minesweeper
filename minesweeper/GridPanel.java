@@ -43,12 +43,12 @@ class GridPanel extends JPanel {
 				JButton cellButton = new JButton();
         cellButton.setPreferredSize(new Dimension(30, 25));
         cellButton.setBackground(Color.white);
-        // Add left click handler
+        // Add left click listener
         final int row = i;
         final int column = j;
         cellButton.addActionListener(e -> {
-          // Clicked mine
-          if (grid.getData(row, column) == -1) {
+          // If left-clicked mine, end game, otherwise reveal cell and surrounding cells recursively
+          if (grid.containsMine(row, column)) {
             Game.gameFrame.infoPanel.stopTimeUpdates();
             showAllMines();
             // Show game over prompt
@@ -58,11 +58,10 @@ class GridPanel extends JPanel {
             } else if (selection == JOptionPane.NO_OPTION) {
               System.exit(0);
             }
-          }
-          // Clicked empty or number cell
-          else {
+          } else {
             grid.revealCellAndSurrounding(row, column);
           }
+
           // When all cells have been revealed
           if (cellsLeft <= this.mines) {
             int score = Game.time.timeElapsed();
@@ -82,7 +81,7 @@ class GridPanel extends JPanel {
             }
           }
         });
-        // Add right click handler
+        // Add right click listener
         cellButton.addMouseListener(new MouseAdapter() {
           @Override
 					public void mouseClicked(MouseEvent e) {
@@ -105,8 +104,9 @@ class GridPanel extends JPanel {
 
   static void revealInGUI(int row, int column) {
     gridPanel[row][column].removeAll();
-    if (grid.getData(row, column) > 0) {
-      gridPanel[row][column].add(new JLabel(String.valueOf(grid.getData(row, column)), SwingConstants.CENTER));
+    int cellData = grid.getData(row, column);
+    if (cellData > 0) {
+      gridPanel[row][column].add(new JLabel(String.valueOf(cellData), SwingConstants.CENTER));
     }
     gridPanel[row][column].revalidate();
     gridPanel[row][column].repaint();
@@ -116,9 +116,8 @@ class GridPanel extends JPanel {
   private void showAllMines() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
-        if (grid.getData(i, j) == -1) {
-          JButton button = (JButton) gridPanel[i][j].getComponent(0);
-          button.setIcon(mineImage);
+        if (grid.containsMine(i, j)) {
+          ((JButton) gridPanel[i][j].getComponent(0)).setIcon(mineImage);
         }
       }
     }
