@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 class GameFrame extends JFrame {
-  InfoPanel infoPanel;
+  private final InfoPanel infoPanel;
 
 	GameFrame(int rows, int columns, int mines, String difficulty) {
     super("Minesweeper");
@@ -20,7 +20,7 @@ class GameFrame extends JFrame {
 		gameMenu.add(new AbstractAction("High Scores") {
       @Override
       public void actionPerformed(ActionEvent e) {
-        Game.highScores.highScoresWindow(difficulty, -1);
+        Game.getHighScores().highScoresWindow(difficulty, -1);
       }
     });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
@@ -80,4 +80,8 @@ class GameFrame extends JFrame {
 
     setVisible(true);
 	}
+
+  InfoPanel getInfoPanel() {
+    return infoPanel;
+  }
 }

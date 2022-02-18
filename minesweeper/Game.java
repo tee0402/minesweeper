@@ -1,7 +1,7 @@
 class Game {
-  static HighScores highScores = new HighScores();
-  static Time time = new Time();
-  static GameFrame gameFrame;
+  private static final HighScores highScores = new HighScores();
+  private static final Time time = new Time();
+  private static GameFrame gameFrame;
 
   static void startGame(String difficulty) {
     closeGame();
@@ -16,6 +16,7 @@ class Game {
         gameFrame = new GameFrame(22, 22, 99, difficulty);
         break;
     }
+    time.reset();
   }
 	
 	private static void closeGame() {
@@ -23,4 +24,16 @@ class Game {
       gameFrame.dispose();
     }
 	}
+
+  static HighScores getHighScores() {
+    return highScores;
+  }
+
+  static Time getTime() {
+    return time;
+  }
+
+  static GameFrame getGameFrame() {
+    return gameFrame;
+  }
 }
