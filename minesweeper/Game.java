@@ -4,7 +4,9 @@ class Game {
   private static GameFrame gameFrame;
 
   static void startGame(String difficulty) {
-    closeGame();
+    if (gameFrame != null) {
+      gameFrame.dispose();
+    }
     switch (difficulty) {
       case "easy":
         gameFrame = new GameFrame(10, 10, 10, difficulty);
@@ -18,12 +20,6 @@ class Game {
     }
     time.reset();
   }
-	
-	private static void closeGame() {
-    if (gameFrame != null) {
-      gameFrame.dispose();
-    }
-	}
 
   static HighScores getHighScores() {
     return highScores;
@@ -31,9 +27,5 @@ class Game {
 
   static Time getTime() {
     return time;
-  }
-
-  static GameFrame getGameFrame() {
-    return gameFrame;
   }
 }

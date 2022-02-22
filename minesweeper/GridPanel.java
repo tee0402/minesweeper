@@ -33,6 +33,8 @@ class GridPanel extends JPanel {
     }
 
 		setLayout(new GridLayout(rows, columns));
+    InfoPanel infoPanel = GameFrame.getInfoPanel();
+    HighScores highScores = Game.getHighScores();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
         gridPanel[i][j] = new JPanel();
@@ -46,7 +48,6 @@ class GridPanel extends JPanel {
         final int row = i;
         final int column = j;
         cellButton.addActionListener(e -> {
-          InfoPanel infoPanel = Game.getGameFrame().getInfoPanel();
           // If left-clicked mine, end game, otherwise reveal cell and surrounding cells recursively
           if (grid.containsMine(row, column)) {
             infoPanel.stopTimeUpdates();
@@ -67,7 +68,6 @@ class GridPanel extends JPanel {
             int score = Game.getTime().timeElapsed();
             infoPanel.stopTimeUpdates();
             showAllMines();
-            HighScores highScores = Game.getHighScores();
             int newHighScoreIndex = highScores.addHighScore(difficulty, score);
             // Show game over prompt if no new high score or high scores window if new high score
             if (newHighScoreIndex == -1) {
@@ -94,7 +94,7 @@ class GridPanel extends JPanel {
                 cellButton.setIcon(null);
                 flagsLeft++;
 							}
-              Game.getGameFrame().getInfoPanel().setFlagsLeftTextField(flagsLeft);
+              infoPanel.setFlagsLeftTextField(flagsLeft);
 						}
 					}
 				});

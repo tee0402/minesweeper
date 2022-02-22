@@ -95,10 +95,6 @@ class HighScores {
 
     private Scores(String fileName) {
       this.fileName = fileName;
-      read();
-    }
-
-    private void read() {
       File file = new File(fileName);
       try {
         if (file.exists() || file.createNewFile()) {

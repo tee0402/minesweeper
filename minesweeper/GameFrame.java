@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 class GameFrame extends JFrame {
-  private final InfoPanel infoPanel;
+  private static InfoPanel infoPanel;
 
 	GameFrame(int rows, int columns, int mines, String difficulty) {
     super("Minesweeper");
@@ -71,8 +71,8 @@ class GameFrame extends JFrame {
 		menuBar.add(helpMenu);
     setJMenuBar(menuBar);
 
-    add(new GridPanel(rows, columns, mines, difficulty), BorderLayout.PAGE_END);
     add(infoPanel = new InfoPanel(mines), BorderLayout.PAGE_START);
+    add(new GridPanel(rows, columns, mines, difficulty), BorderLayout.PAGE_END);
 
     pack();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -81,7 +81,7 @@ class GameFrame extends JFrame {
     setVisible(true);
 	}
 
-  InfoPanel getInfoPanel() {
+  static InfoPanel getInfoPanel() {
     return infoPanel;
   }
 }
