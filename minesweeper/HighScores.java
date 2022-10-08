@@ -3,6 +3,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -90,7 +91,7 @@ class HighScores {
   }
 
   private static class Scores {
-    private final ArrayList<Integer> scores = new ArrayList<>();
+    private final List<Integer> scores = new ArrayList<>();
     private final String fileName;
 
     private Scores(String fileName) {
