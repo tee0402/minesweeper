@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,19 +14,15 @@ class HighScores {
 	private final Scores hardScores = new Scores("hard_scores.txt");
   private JFrame frame;
 
-  int addHighScore(String difficulty, int score) {
-    switch (difficulty) {
-      case "easy":
-        return easyScores.add(score);
-      case "medium":
-        return mediumScores.add(score);
-      case "hard":
-        return hardScores.add(score);
-    }
-    return -1;
+  int addHighScore(Difficulty difficulty, int score) {
+    return switch (difficulty) {
+      case EASY -> easyScores.add(score);
+      case MEDIUM -> mediumScores.add(score);
+      case HARD -> hardScores.add(score);
+    };
   }
 	
-	void highScoresWindow(String difficulty, int newHighScoreIndex) {
+	void highScoresWindow(Difficulty difficulty, int newHighScoreIndex) {
     closeHighScoresWindow();
 		frame = new JFrame("High Scores");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -51,9 +48,12 @@ class HighScores {
     scoresPanel.add(easyLabel);
     scoresPanel.add(mediumLabel);
     scoresPanel.add(hardLabel);
-    boolean easy = difficulty.equals("easy");
-    boolean medium = difficulty.equals("medium");
-    boolean hard = difficulty.equals("hard");
+    boolean easy = difficulty == Difficulty.EASY;
+    boolean medium = difficulty == Difficulty.MEDIUM;
+    boolean hard = difficulty == Difficulty.HARD;
+    easyScores.setSize();
+    mediumScores.setSize();
+    hardScores.setSize();
     for (int i = 0; i < 10; i++) {
       boolean newHighScoreRow = i == newHighScoreIndex;
 			scoresPanel.add(easyScores.createScoreLabel(i, easy && newHighScoreRow));
@@ -92,6 +92,7 @@ class HighScores {
 
   private static class Scores {
     private final List<Integer> scores = new ArrayList<>();
+    private int size;
     private final String fileName;
 
     private Scores(String fileName) {
@@ -111,29 +112,16 @@ class HighScores {
     }
 
     private int add(int score) {
-      int index = -1;
-      int numScores = scores.size();
-      if (numScores < 10 || score < scores.get(numScores - 1)) {
-        if (numScores == 0) {
-          scores.add(score);
-          index = 0;
-        } else if (numScores < 10 && score >= scores.get(numScores - 1)) {
-          scores.add(score);
-          index = scores.size() - 1;
-        } else {
-          for (int i = 0; i < numScores; i++) {
-            if (score < scores.get(i)) {
-              scores.add(i, score);
-              if (scores.size() == 11) {
-                scores.remove(10);
-              }
-              index = i;
-              break;
-            }
-          }
-        }
-        write();
+      int insertionPoint = Collections.binarySearch(scores, score);
+      int index = insertionPoint < 0 ? - (insertionPoint + 1) : insertionPoint;
+      if (index == 10) {
+        return -1;
       }
+      scores.add(index, score);
+      if (scores.size() == 11) {
+        scores.remove(10);
+      }
+      write();
       return index;
     }
 
@@ -149,17 +137,20 @@ class HighScores {
       }
     }
 
+    private void setSize() {
+      size = scores.size();
+    }
+
     private JLabel createScoreLabel(int i, boolean highlight) {
-      if (i < scores.size()) {
-        JLabel scoreLabel = new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
-        if (highlight) {
-          scoreLabel.setForeground(Color.red);
-        }
-        scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-        return scoreLabel;
-      } else {
+      if (i >= size) {
         return new JLabel();
       }
+      JLabel scoreLabel = new JLabel(String.valueOf(scores.get(i)), SwingConstants.CENTER);
+      if (highlight) {
+        scoreLabel.setForeground(Color.red);
+      }
+      scoreLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+      return scoreLabel;
     }
   }
 }

@@ -8,25 +8,25 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
 
-class GridPanel extends JPanel {
+class PanelGrid extends JPanel {
   private final int rows, columns, mines;
   private int cellsLeft, flagsLeft;
-  private final Grid grid;
-	private final JPanel[][] gridPanel;
+  private final CellGrid cellGrid;
+	private final JPanel[][] panelGrid;
   private ImageIcon flagImage, mineImage;
 
-	GridPanel(int rows, int columns, int mines, String difficulty) {
+	PanelGrid(int rows, int columns, int mines, Difficulty difficulty) {
 		this.rows = rows;
     this.columns = columns;
     cellsLeft = rows * columns;
 		this.mines = flagsLeft = mines;
-    grid = new Grid(rows, columns, mines);
-    gridPanel = new JPanel[rows][columns];
+    cellGrid = new CellGrid(rows, columns, mines);
+    panelGrid = new JPanel[rows][columns];
 
     try {
-      BufferedImage flag = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/flag.gif")));
+      BufferedImage flag = ImageIO.read(Objects.requireNonNull(PanelGrid.class.getResource("resources/flag.gif")));
       flagImage = new ImageIcon(flag.getScaledInstance(30, 25, Image.SCALE_SMOOTH));
-      BufferedImage mine = ImageIO.read(Objects.requireNonNull(GridPanel.class.getResource("resources/mine.gif")));
+      BufferedImage mine = ImageIO.read(Objects.requireNonNull(PanelGrid.class.getResource("resources/mine.gif")));
       mineImage = new ImageIcon(mine.getScaledInstance(30, 25, Image.SCALE_SMOOTH));
     } catch (IOException e) {
       System.out.println("Error scaling images");
@@ -37,48 +37,46 @@ class GridPanel extends JPanel {
     HighScores highScores = Game.getHighScores();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-        gridPanel[i][j] = new JPanel();
-        gridPanel[i][j].setLayout(new BorderLayout());
-				add(gridPanel[i][j]);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        add(panel);
 
 				JButton cellButton = new JButton();
         cellButton.setPreferredSize(new Dimension(30, 25));
         cellButton.setBackground(Color.white);
         // Add left click listener
+        boolean mine = cellGrid.containsMine(i, j);
         final int row = i;
         final int column = j;
         cellButton.addActionListener(e -> {
           // If left-clicked mine, end game, otherwise reveal cell and surrounding cells recursively
-          if (grid.containsMine(row, column)) {
+          if (mine) {
             infoPanel.stopTimeUpdates();
             showAllMines();
             // Show game over prompt
             int selection = JOptionPane.showConfirmDialog(null, "Game over! Play again?");
-            if (selection == JOptionPane.YES_OPTION) {
-              Game.startGame(difficulty);
-            } else if (selection == JOptionPane.NO_OPTION) {
-              System.exit(0);
+            switch (selection) {
+              case JOptionPane.YES_OPTION -> Game.startGame(difficulty);
+              case JOptionPane.NO_OPTION -> System.exit(0);
             }
           } else {
-            grid.revealCellAndSurrounding(row, column);
-          }
-
-          // When all cells have been revealed
-          if (cellsLeft <= this.mines) {
-            int score = Game.getTime().timeElapsed();
-            infoPanel.stopTimeUpdates();
-            showAllMines();
-            int newHighScoreIndex = highScores.addHighScore(difficulty, score);
-            // Show game over prompt if no new high score or high scores window if new high score
-            if (newHighScoreIndex == -1) {
-              int selection = JOptionPane.showConfirmDialog(null, "You won with a score of " + score + "! Play again?");
-              if (selection == JOptionPane.YES_OPTION) {
-                Game.startGame(difficulty);
-              } else if (selection == JOptionPane.NO_OPTION) {
-                System.exit(0);
+            cellGrid.revealCellAndSurrounding(row, column);
+            // When all cells have been revealed
+            if (cellsLeft <= this.mines) {
+              int score = (int) Game.getTime().timeElapsed();
+              infoPanel.stopTimeUpdates();
+              showAllMines();
+              int newHighScoreIndex = highScores.addHighScore(difficulty, score);
+              // Show game over prompt if no new high score or high scores window if new high score
+              if (newHighScoreIndex == -1) {
+                int selection = JOptionPane.showConfirmDialog(null, "You won with a score of " + score + "! Play again?");
+                switch (selection) {
+                  case JOptionPane.YES_OPTION -> Game.startGame(difficulty);
+                  case JOptionPane.NO_OPTION -> System.exit(0);
+                }
+              } else {
+                highScores.highScoresWindow(difficulty, newHighScoreIndex);
               }
-            } else {
-              highScores.highScoresWindow(difficulty, newHighScoreIndex);
             }
           }
         });
@@ -87,56 +85,58 @@ class GridPanel extends JPanel {
           @Override
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
-							if (cellButton.getIcon() == null && flagsLeft > 0) {
-                cellButton.setIcon(flagImage);
-                flagsLeft--;
-							} else if (cellButton.getIcon() != null) {
+              if (cellButton.getIcon() != null) {
                 cellButton.setIcon(null);
                 flagsLeft++;
+              } else if (flagsLeft > 0) {
+                cellButton.setIcon(flagImage);
+                flagsLeft--;
 							}
               infoPanel.setFlagsLeftTextField(flagsLeft);
 						}
 					}
 				});
-        gridPanel[i][j].add(cellButton);
+        panel.add(cellButton);
+
+        panelGrid[i][j] = panel;
 			}
 		}
 	}
 
-  private void revealInGUI(int row, int column) {
-    gridPanel[row][column].removeAll();
-    int cellData = grid.getData(row, column);
-    if (cellData > 0) {
-      gridPanel[row][column].add(new JLabel(String.valueOf(cellData), SwingConstants.CENTER));
+  private void revealInGUI(int row, int column, int data) {
+    JPanel panel = panelGrid[row][column];
+    panel.removeAll();
+    if (data > 0) {
+      panel.add(new JLabel(String.valueOf(data), SwingConstants.CENTER));
     }
-    gridPanel[row][column].revalidate();
-    gridPanel[row][column].repaint();
+    panel.revalidate();
+    panel.repaint();
     cellsLeft--;
   }
 
   private void showAllMines() {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
-        if (grid.containsMine(i, j)) {
-          ((JButton) gridPanel[i][j].getComponent(0)).setIcon(mineImage);
+        if (cellGrid.containsMine(i, j)) {
+          ((JButton) panelGrid[i][j].getComponent(0)).setIcon(mineImage);
         }
       }
     }
   }
 
-  private class Grid {
-    private final Cell[][] grid;
+  private class CellGrid {
+    private final Cell[][] cellGrid;
     private final int rows, columns;
 
-    private Grid(int rows, int columns, int mines) {
+    private CellGrid(int rows, int columns, int mines) {
       this.rows = rows;
       this.columns = columns;
 
       // Set up grid of empty cells
-      grid = new Cell[rows][columns];
+      cellGrid = new Cell[rows][columns];
       for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-          grid[i][j] = new Cell();
+          cellGrid[i][j] = new Cell();
         }
       }
 
@@ -146,9 +146,8 @@ class GridPanel extends JPanel {
       while (minesPlaced < mines) {
         int x = random.nextInt(rows);
         int y = random.nextInt(columns);
-        // If the cell at the new random coordinates is not already a mine, place a mine there and increment adjacent cells
-        if (grid[x][y].getData() != -1) {
-          grid[x][y].setData(-1);
+        if (!containsMine(x, y)) {
+          cellGrid[x][y].setData(-1);
           minesPlaced++;
           incrementCell(getCell(x - 1, y));
           incrementCell(getCell(x - 1, y + 1));
@@ -162,6 +161,10 @@ class GridPanel extends JPanel {
       }
     }
 
+    private boolean containsMine(int row, int column) {
+      return cellGrid[row][column].getData() == -1;
+    }
+
     private void incrementCell(Cell cell) {
       if (cell != null && cell.getData() != -1) {
         cell.setData(cell.getData() + 1);
@@ -169,27 +172,16 @@ class GridPanel extends JPanel {
     }
 
     private Cell getCell(int row, int column) {
-      if (row >= 0 && row < rows && column >= 0 && column < columns) {
-        return grid[row][column];
-      }
-      return null;
-    }
-
-    private int getData(int row, int column) {
-      Cell cell = getCell(row, column);
-      return cell == null ? -2 : cell.getData();
-    }
-
-    private boolean containsMine(int row, int column) {
-      return getData(row, column) == -1;
+      return row >= 0 && row < rows && column >= 0 && column < columns ? cellGrid[row][column] : null;
     }
 
     private void revealCellAndSurrounding(int row, int column) {
       Cell cell = getCell(row, column);
       if (cell != null && !cell.getRevealed()) {
         cell.setRevealed();
-        revealInGUI(row, column);
-        if (cell.getData() == 0) {
+        int data = cell.getData();
+        revealInGUI(row, column, data);
+        if (data == 0) {
           revealCellAndSurrounding(row - 1, column);
           revealCellAndSurrounding(row - 1, column + 1);
           revealCellAndSurrounding(row, column + 1);

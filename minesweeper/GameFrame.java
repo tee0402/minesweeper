@@ -5,11 +5,11 @@ import java.awt.event.ActionEvent;
 class GameFrame extends JFrame {
   private static InfoPanel infoPanel;
 
-	GameFrame(int rows, int columns, int mines, String difficulty) {
+	GameFrame(int rows, int columns, int mines, Difficulty difficulty) {
     super("Minesweeper");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setResizable(false);
-		
+
 		JMenu gameMenu = new JMenu("Game");
 		gameMenu.add(new AbstractAction("New Game") {
       @Override
@@ -24,27 +24,27 @@ class GameFrame extends JFrame {
       }
     });
 		JMenu changeDifficulty = new JMenu("Change Difficulty");
-    if (!difficulty.equals("easy")) {
+    if (difficulty != Difficulty.EASY) {
       changeDifficulty.add(new AbstractAction("Easy") {
         @Override
         public void actionPerformed(ActionEvent e) {
-          Game.startGame("easy");
+          Game.startGame(Difficulty.EASY);
         }
       });
     }
-    if (!difficulty.equals("medium")) {
+    if (difficulty != Difficulty.MEDIUM) {
       changeDifficulty.add(new AbstractAction("Medium") {
         @Override
         public void actionPerformed(ActionEvent e) {
-          Game.startGame("medium");
+          Game.startGame(Difficulty.MEDIUM);
         }
       });
     }
-    if (!difficulty.equals("hard")) {
+    if (difficulty != Difficulty.HARD) {
       changeDifficulty.add(new AbstractAction("Hard") {
         @Override
         public void actionPerformed(ActionEvent e) {
-          Game.startGame("hard");
+          Game.startGame(Difficulty.HARD);
         }
       });
     }
@@ -72,7 +72,7 @@ class GameFrame extends JFrame {
     setJMenuBar(menuBar);
 
     add(infoPanel = new InfoPanel(mines), BorderLayout.PAGE_START);
-    add(new GridPanel(rows, columns, mines, difficulty), BorderLayout.PAGE_END);
+    add(new PanelGrid(rows, columns, mines, difficulty), BorderLayout.PAGE_END);
 
     pack();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

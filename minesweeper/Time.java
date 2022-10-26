@@ -5,7 +5,7 @@ class Time {
     startTime = System.currentTimeMillis();
   }
 	
-	int timeElapsed() {
-		return (int) ((System.currentTimeMillis() - startTime) / 1000);
+	long timeElapsed() {
+		return (System.currentTimeMillis() - startTime) / 1000;
 	}
 }

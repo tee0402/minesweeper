@@ -22,15 +22,15 @@ class MenuFrame extends JFrame {
     JButton hardButton = new JButton("Hard");
     easyButton.addActionListener(e -> {
       dispose();
-      Game.startGame("easy");
+      Game.startGame(Difficulty.EASY);
     });
     mediumButton.addActionListener(e -> {
       dispose();
-      Game.startGame("medium");
+      Game.startGame(Difficulty.MEDIUM);
     });
     hardButton.addActionListener(e -> {
       dispose();
-      Game.startGame("hard");
+      Game.startGame(Difficulty.HARD);
     });
     easyButton.setMaximumSize(new Dimension(width / 2, height / 5));
     mediumButton.setMaximumSize(new Dimension(width / 2, height / 5));
