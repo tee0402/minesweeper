@@ -147,16 +147,16 @@ class PanelGrid extends JPanel {
         int x = random.nextInt(rows);
         int y = random.nextInt(columns);
         if (!containsMine(x, y)) {
-          cellGrid[x][y].setData(-1);
-          minesPlaced++;
+          incrementCell(getCell(x - 1, y - 1));
           incrementCell(getCell(x - 1, y));
           incrementCell(getCell(x - 1, y + 1));
-          incrementCell(getCell(x, y + 1));
-          incrementCell(getCell(x + 1, y + 1));
-          incrementCell(getCell(x + 1, y));
-          incrementCell(getCell(x + 1, y - 1));
           incrementCell(getCell(x, y - 1));
-          incrementCell(getCell(x - 1, y - 1));
+          cellGrid[x][y].setData(-1);
+          incrementCell(getCell(x, y + 1));
+          incrementCell(getCell(x + 1, y - 1));
+          incrementCell(getCell(x + 1, y));
+          incrementCell(getCell(x + 1, y + 1));
+          minesPlaced++;
         }
       }
     }
@@ -175,6 +175,7 @@ class PanelGrid extends JPanel {
       return row >= 0 && row < rows && column >= 0 && column < columns ? cellGrid[row][column] : null;
     }
 
+    // DFS
     private void revealCellAndSurrounding(int row, int column) {
       Cell cell = getCell(row, column);
       if (cell != null && !cell.getRevealed()) {
@@ -182,14 +183,14 @@ class PanelGrid extends JPanel {
         int data = cell.getData();
         revealInGUI(row, column, data);
         if (data == 0) {
+          revealCellAndSurrounding(row - 1, column - 1);
           revealCellAndSurrounding(row - 1, column);
           revealCellAndSurrounding(row - 1, column + 1);
-          revealCellAndSurrounding(row, column + 1);
-          revealCellAndSurrounding(row + 1, column + 1);
-          revealCellAndSurrounding(row + 1, column);
-          revealCellAndSurrounding(row + 1, column - 1);
           revealCellAndSurrounding(row, column - 1);
-          revealCellAndSurrounding(row - 1, column - 1);
+          revealCellAndSurrounding(row, column + 1);
+          revealCellAndSurrounding(row + 1, column - 1);
+          revealCellAndSurrounding(row + 1, column);
+          revealCellAndSurrounding(row + 1, column + 1);
         }
       }
     }
